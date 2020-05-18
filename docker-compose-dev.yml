@@ -3,8 +3,11 @@ version: '3'
 services:
   mysql:
     image: mariadb:10.4
-    env_file:
-      - ./development.env
+    environment:
+    - MYSQL_ROOT_PASSWORD=mailtrain
+    - MYSQL_DATABASE=mailtrain
+    - MYSQL_USER=mailtrain
+    - MYSQL_PASSWORD=mailtrain
     volumes:
     - mysql-data:/var/lib/mysql
 
