@@ -29,6 +29,14 @@ services:
     volumes:
     - mailtrain-files:/app/server/files
 
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+      - 443:443
+
 volumes:
   mysql-data:
   redis-data:
