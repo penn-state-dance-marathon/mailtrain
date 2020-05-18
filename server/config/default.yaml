@@ -151,7 +151,7 @@ ldap:
   # mailTag identifies the attribute to be used for user's email address
   mailTag: mail
   passwordresetlink:
-  newUserRole: master
+  newUserRole: nobody
   # Global namespace id
   newUserNamespaceId: 1
   # Use a different user to bind LDAP (final bind DN will be: {{uidTag}}: {{bindUser}},{{baseDN}})
