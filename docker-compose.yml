@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  mysql:
+mysql:
     image: mariadb:10.4
     environment:
     - MYSQL_ROOT_PASSWORD=mailtrain
@@ -22,13 +22,9 @@ services:
     - mongo-data:/data/db
 
   mailtrain:
-    depends_on:
-      - mongo
-      - mysql
-      - redis
+    image: mailtrain/mailtrain:latest
     env_file:
       - ./development.env
-    build: .
     ports:
     - "3000:3000"
     - "3003:3003"
