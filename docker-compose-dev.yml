@@ -19,6 +19,10 @@ services:
     - mongo-data:/data/db
 
   mailtrain:
+    depends_on:
+      - mongo
+      - mysql
+      - redis
     env_file:
       - ./development.env
     build: .
