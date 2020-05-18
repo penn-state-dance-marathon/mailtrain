@@ -1,7 +1,7 @@
 /.idea
 /.vscode
 /last-failed-e2e-test.*
-
+*.env
 node_modules
 npm-debug.log
 .DS_Store

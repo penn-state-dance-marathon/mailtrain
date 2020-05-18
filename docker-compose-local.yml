@@ -22,6 +22,8 @@ services:
     - mongo-data:/data/db
 
   mailtrain:
+    env_file:
+      - ./local.env
     build: .
     ports:
     - "3000:3000"
