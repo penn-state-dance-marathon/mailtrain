@@ -19,8 +19,8 @@ export default class List extends Component {
 
         return (
             <div>
-                <h2>{t('Mailtrain 2 beta')}</h2>
-                <div>{t('Build') + ' 2019-01-12-1254'}</div>
+                <h2>{t('THON MailTrain')}</h2>
+                <div>{t('Welcome to THON\'s fork of MailTrain! There isn\'t much here yet, check back for a fresh UI and support for some of THON\'s biggest newsletters.')}</div>
             </div>
         );
     }
