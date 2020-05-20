@@ -32,6 +32,20 @@ services:
     volumes:
     - mailtrain-files:/app/server/files
 
+  admin:
+    container_name: admin
+    depends_on:
+      - mysql
+    restart: always
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 3001:80
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: mailtrain
+    links:
+      - mysql
+
 volumes:
   mysql-data:
   redis-data:
