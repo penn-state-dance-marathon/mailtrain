@@ -113,7 +113,7 @@ export default class Login extends Component {
 
         return (
             <div>
-                <Title>{t('signIn')}</Title>
+                <Title>{t('Login using your Penn State credentials')}</Title>
 
                 <Form stateOwner={this} onSubmitAsync={::this.submitHandler}>
                     <InputField id="username" label={t('username')}/>
