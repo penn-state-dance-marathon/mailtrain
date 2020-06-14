@@ -14,6 +14,7 @@ import {getRoutes, renderRoute, Resolver, SectionContentContext, withPageHelpers
 import {getBaseDir} from "./urls";
 import {createComponentMixin, withComponentMixins} from "./decorator-helpers";
 import {getLang} from "../../../shared/langs";
+import Logo from "../../static/shuttershade_white.png";
 
 export { withPageHelpers }
 
@@ -180,14 +181,14 @@ function renderFrameWithContent(t, panelInFullScreen, showSidebar, primaryMenu, 
         return (
             <div key="app" className={"app " + (showSidebar ? 'sidebar-lg-show' : '')}>
                 <header key="appHeader" className="app-header">
-                    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+                    <nav className="navbar navbar-expand-lg navbar-dark ">
                         {showSidebar &&
                         <button className="navbar-toggler sidebar-toggler" data-toggle="sidebar-show" type="button">
                             <span className="navbar-toggler-icon"/>
                         </button>
                         }
 
-                        <Link className="navbar-brand" to="/"><div><Icon icon="envelope"/> Mailtrain</div></Link>
+                        <Link className="navbar-brand" to="/"><div><img height="50" src={Logo}/></div></Link>
 
                         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#mtMainNavbar" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon"/>

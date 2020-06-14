@@ -66,12 +66,11 @@ body.mailtrain {
   .app-header {
 
     .navbar {
-      padding: 0 15px;
-
+      padding: 0 20px;
+      background-color: #14245F;
       .navbar-brand {
         // width: $sidebar-width - 30px;
-        width: 130px; // We don't use sidebar yet, so no need to align with it.
-
+        width: auto; // We don't use sidebar yet, so no need to align with it.
         justify-content: left;
 
         @include media-breakpoint-down(md) {
@@ -102,6 +101,7 @@ body.mailtrain {
     .navbar-nav {
       margin-top: 8px;
       margin-bottom: 8px;
+      background-color: #14245F;
     }
 
     .mt-navbar-nav-right {
@@ -112,6 +112,7 @@ body.mailtrain {
 
       .nav-item {
         .nav-link {
+          color: #FFC915;
           padding: 0px;
         }
 
@@ -132,7 +133,8 @@ body.mailtrain {
 
     .mt-navbar-nav-left {
       @include media-breakpoint-up(lg) {
-        margin-left: 15px;
+        margin-left: 30px;
+
       }
 
       .nav-item {
@@ -155,6 +157,9 @@ body.mailtrain {
 
   .navbar-dark {
     .navbar-nav {
+      .nav-link {
+        color: #FFC915;
+      }
       .active > .nav-link:hover {
         color: $navbar-dark-active-color;
       }
