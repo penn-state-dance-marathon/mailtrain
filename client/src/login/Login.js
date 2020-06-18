@@ -2,7 +2,7 @@
 
 import React, {Component} from 'react';
 import {withTranslation} from '../lib/i18n';
-import {Title, withPageHelpers} from '../lib/page'
+import {Title, withPageHelpers,Subheading} from '../lib/page'
 import {Link} from 'react-router-dom'
 import {
     Button,
@@ -113,8 +113,8 @@ export default class Login extends Component {
 
         return (
             <div>
-                <Title>{t('Login using your Penn State credentials')}</Title>
-
+                <Title>{t('Login')}</Title>
+                <Subheading>{t('Use your Penn State credentials')}</Subheading>
                 <Form stateOwner={this} onSubmitAsync={::this.submitHandler}>
                     <InputField id="username" label={t('username')}/>
                     <InputField id="password" label={t('password')} type="password" />

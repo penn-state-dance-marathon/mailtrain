@@ -14,7 +14,7 @@ import {getRoutes, renderRoute, Resolver, SectionContentContext, withPageHelpers
 import {getBaseDir} from "./urls";
 import {createComponentMixin, withComponentMixins} from "./decorator-helpers";
 import {getLang} from "../../../shared/langs";
-import Logo from "../../static/shuttershade_white.png";
+import Logo from "../../static/shuttershade_main.png";
 
 export { withPageHelpers }
 
@@ -188,8 +188,12 @@ function renderFrameWithContent(t, panelInFullScreen, showSidebar, primaryMenu, 
                         </button>
                         }
 
-                        <Link className="navbar-brand" to="/"><div><img height="50" src={Logo}/></div></Link>
-
+                        <Link className="navbar-brand" to="/">
+                            <div><img height="35" src={Logo}/></div>
+                        </Link>
+                        <div class="navbar-title">
+                            <h1>Mailtrain</h1>
+                        </div>
                         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#mtMainNavbar" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon"/>
                         </button>
@@ -212,7 +216,7 @@ function renderFrameWithContent(t, panelInFullScreen, showSidebar, primaryMenu, 
                 </div>
 
                 <footer key="appFooter" className="app-footer">
-                    <div className="text-muted">&copy; 2018 <a href="https://mailtrain.org">Mailtrain.org</a>, <a href="mailto:info@mailtrain.org">info@mailtrain.org</a>. <a href="https://github.com/Mailtrain-org/mailtrain">{t('sourceOnGitHub')}</a></div>
+                    <div className="text-muted">Fork of Mailtrain v2, modified by Penn State Dance Marathon under a GNU Public License v3.0. &copy; 2018 <a href="https://mailtrain.org">Mailtrain.org</a>, <a href="mailto:info@mailtrain.org">info@mailtrain.org</a>. <a href="https://github.com/Mailtrain-org/mailtrain">{t('sourceOnGitHub')}</a></div>
                 </footer>
             </div>
         );
@@ -539,13 +543,22 @@ export class Section extends Component {
     }
 }
 
+export class Subheading extends Component {
+    render(){
+    return (
+        <div>
+            <h6>{this.props.children}</h6> <hr/>
+        </div>
+    );
+    }
+}
+
 
 export class Title extends Component {
     render() {
         return (
             <div>
                 <h2>{this.props.children}</h2>
-                <hr/>
             </div>
         );
     }
