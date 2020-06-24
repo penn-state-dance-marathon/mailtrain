@@ -16,6 +16,7 @@ import {
 } from '../lib/form';
 import {withErrorHandling} from '../lib/error-handling';
 import qs from 'querystringify';
+import styles from '../lib/styles.scss';
 import interoperableErrors from '../../../shared/interoperable-errors';
 import mailtrainConfig from 'mailtrainConfig';
 import {getUrl} from "../lib/urls";

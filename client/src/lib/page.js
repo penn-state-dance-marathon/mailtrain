@@ -14,7 +14,7 @@ import {getRoutes, renderRoute, Resolver, SectionContentContext, withPageHelpers
 import {getBaseDir} from "./urls";
 import {createComponentMixin, withComponentMixins} from "./decorator-helpers";
 import {getLang} from "../../../shared/langs";
-import Logo from "../../static/shuttershade_main.png";
+import Logo from "../../static/thon_mailtrain.png";
 
 export { withPageHelpers }
 
@@ -39,7 +39,7 @@ class Breadcrumb extends Component {
         }
 
         if (isActive) {
-            return <li key={entry.path} className="breadcrumb-item active">{title}</li>;
+            return <li key={entry.path} className="breadcrumb-item">{title}</li>;
 
         } else if (entry.externalLink) {
             let externalLink;
@@ -189,11 +189,8 @@ function renderFrameWithContent(t, panelInFullScreen, showSidebar, primaryMenu, 
                         }
 
                         <Link className="navbar-brand" to="/">
-                            <div><img height="35" src={Logo}/></div>
+                            <div><img height="25" src={Logo}/></div>
                         </Link>
-                        <div class="navbar-title">
-                            <h1>Mailtrain</h1>
-                        </div>
                         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#mtMainNavbar" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon"/>
                         </button>
@@ -215,7 +212,7 @@ function renderFrameWithContent(t, panelInFullScreen, showSidebar, primaryMenu, 
                     </main>
                 </div>
 
-                <footer key="appFooter" className="app-footer">
+                <footer id="thon-footer">
                     <div className="text-muted">Fork of Mailtrain v2, modified by Penn State Dance Marathon under a GNU Public License v3.0. &copy; 2018 <a href="https://mailtrain.org">Mailtrain.org</a>, <a href="mailto:info@mailtrain.org">info@mailtrain.org</a>. <a href="https://github.com/Mailtrain-org/mailtrain">{t('sourceOnGitHub')}</a></div>
                 </footer>
             </div>
