@@ -39,7 +39,7 @@ class Breadcrumb extends Component {
         }
 
         if (isActive) {
-            return <li key={entry.path} className="breadcrumb-item">{title}</li>;
+            return <li key={entry.path} className="breadcrumb-item active">{title}</li>;
 
         } else if (entry.externalLink) {
             let externalLink;
