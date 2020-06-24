@@ -212,7 +212,7 @@ function renderFrameWithContent(t, panelInFullScreen, showSidebar, primaryMenu, 
                     </main>
                 </div>
 
-                <footer id="thon-footer">
+                <footer id="thon-footer" class="app-footer">
                     <div className="text-muted">Fork of Mailtrain v2, modified by Penn State Dance Marathon under a GNU Public License v3.0. &copy; 2018 <a href="https://mailtrain.org">Mailtrain.org</a>, <a href="mailto:info@mailtrain.org">info@mailtrain.org</a>. <a href="https://github.com/Mailtrain-org/mailtrain">{t('sourceOnGitHub')}</a></div>
                 </footer>
             </div>
