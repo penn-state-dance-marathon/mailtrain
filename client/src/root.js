@@ -141,4 +141,10 @@ export default function() {
     ReactDOM.render(<TranslationRoot><Root/></TranslationRoot>,document.getElementById('root'));
 };
 
+if (module.hot) {
+    module.hot.accept('./root.js', function () {
+        console.log('Accepting the updated printMe module!');
+        printMe();
+    })
+}
 
