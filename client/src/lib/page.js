@@ -14,6 +14,7 @@ import {getRoutes, renderRoute, Resolver, SectionContentContext, withPageHelpers
 import {getBaseDir} from "./urls";
 import {createComponentMixin, withComponentMixins} from "./decorator-helpers";
 import {getLang} from "../../../shared/langs";
+import Logo from "../../static/thon_mailtrain.png";
 
 export { withPageHelpers }
 
@@ -180,15 +181,16 @@ function renderFrameWithContent(t, panelInFullScreen, showSidebar, primaryMenu, 
         return (
             <div key="app" className={"app " + (showSidebar ? 'sidebar-lg-show' : '')}>
                 <header key="appHeader" className="app-header">
-                    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+                    <nav className="navbar navbar-expand-lg navbar-dark ">
                         {showSidebar &&
                         <button className="navbar-toggler sidebar-toggler" data-toggle="sidebar-show" type="button">
                             <span className="navbar-toggler-icon"/>
                         </button>
                         }
 
-                        <Link className="navbar-brand" to="/"><div><Icon icon="envelope"/> Mailtrain</div></Link>
-
+                        <Link className="navbar-brand" to="/">
+                            <div><img height="25" src={Logo}/></div>
+                        </Link>
                         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#mtMainNavbar" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon"/>
                         </button>
@@ -210,8 +212,8 @@ function renderFrameWithContent(t, panelInFullScreen, showSidebar, primaryMenu, 
                     </main>
                 </div>
 
-                <footer key="appFooter" className="app-footer">
-                    <div className="text-muted">&copy; 2018 <a href="https://mailtrain.org">Mailtrain.org</a>, <a href="mailto:info@mailtrain.org">info@mailtrain.org</a>. <a href="https://github.com/Mailtrain-org/mailtrain">{t('sourceOnGitHub')}</a></div>
+                <footer id="thon-footer" class="app-footer">
+                    <div className="text-muted">Fork of Mailtrain v2, modified by Penn State Dance Marathon under a GNU Public License v3.0. &copy; 2018 <a href="https://mailtrain.org">Mailtrain.org</a>, <a href="mailto:info@mailtrain.org">info@mailtrain.org</a>. <a href="https://github.com/Mailtrain-org/mailtrain">{t('sourceOnGitHub')}</a></div>
                 </footer>
             </div>
         );
@@ -538,13 +540,22 @@ export class Section extends Component {
     }
 }
 
+export class Subheading extends Component {
+    render(){
+    return (
+        <div>
+            <h6>{this.props.children}</h6> <hr/>
+        </div>
+    );
+    }
+}
+
 
 export class Title extends Component {
     render() {
         return (
             <div>
                 <h2>{this.props.children}</h2>
-                <hr/>
             </div>
         );
     }
