@@ -201,8 +201,6 @@ mosaico:
   fsTemplates:
   - key: versafix-1
     label: Versafix One
-  - key: tedc15
-    label: TEDC-15
   # Inject custom scripts
   # customscripts:
   # - /mosaico/custom/my-mosaico-plugin.js
