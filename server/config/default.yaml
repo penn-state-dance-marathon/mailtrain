@@ -201,8 +201,6 @@ mosaico:
   fsTemplates:
   - key: versafix-1
     label: Versafix One
-  - key: tedc15
-    label: TEDC-15
   # Inject custom scripts
   # customscripts:
   # - /mosaico/custom/my-mosaico-plugin.js
@@ -334,7 +332,7 @@ defaultRoles:
         namespace: [view, createTemplate, createCampaign]
 
     campaignsViewer:
-      name: Campaigns Viewer
+      name: Campaigns Viewer8
       description: In the respective namespace, the user has permissions to view campaigns and templates in order to be able to replicate them.
       permissions: [view, createTemplate, createCampaign]
       children:

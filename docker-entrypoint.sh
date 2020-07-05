@@ -36,6 +36,22 @@ MYSQL_PASSWORD=${MYSQL_PASSWORD:-'mailtrain'}
 WITH_ZONE_MTA=${WITH_ZONE_MTA:-'true'}
 POOL_NAME=${POOL_NAME:-$(hostname)}
 
+SENDER_PROCESSES=${SENDER_PROCESSES:-'5'}
+LOG_LEVEL=${LOG_LEVEL:-'info'}
+MAX_POST_SIZE=${MAX_POST_SIZE:-'2MB'}
+WITH_REPORTS=${WITH_REPORTS:-'true'}
+
+RETENTION_CAMPAIGN=${RETENTION_CAMPAIGN:-'86400'}
+RETENTION_TRIGGERED=${RETENTION_TRIGGERED:-'86400'}
+RETENTION_TEST=${RETENTION_TEST:-'300'}
+RETENTION_SUBSCRIPTION=${RETENTION_SUBSCRIPTION:-'300'}
+RETENTION_API=${RETENTION_API:-'3600'}
+
+GDPR_DELETE_DATA=${GDPR_DELETE_DATA:-'true'}
+GDPR_DELETE_SUBSCRIPTION=${GDPR_DELETE_SUBSCRIPTION:-'true'}
+GDPR_DATA_RETENTION=${$GDPR_DATA_RETENTION:-'86400'}
+GDPR_SUBSCRIPTION_RETENTION=${GDPR_SUBSCRIPTION_RETENTION:-'2592000'}
+
 # Warning for users that already rely on the MAILTRAIN_SETTING variable
 # Can probably be removed in the future.
 MAILTRAIN_SETTING=${MAILTRAIN_SETTINGS:-}
@@ -51,6 +67,15 @@ else
 
     # Basic configuration
     cat >> server/config/production.yaml <<EOT
+gdpr:
+  deleteDataAfterUnsubscribe:
+    enabled: $GDPR_DELETE_DATA
+    secondsAfterUnsubscribe: $GDPR_DATA_RETENTION
+
+  deleteSubscriptionAfterUnsubscribe:
+    enabled: $$GDPR_DELETE_SUBSCRIPTION
+    secondsAfterUnsubscribe: $GDPR_SUBSCRIPTION_RETENTION
+
 www:
   host: $WWW_HOST
   proxy: $WWW_PROXY
@@ -61,12 +86,30 @@ www:
   trustedUrlBase: $URL_BASE_TRUSTED
   sandboxUrlBase: $URL_BASE_SANDBOX
   publicUrlBase: $URL_BASE_PUBLIC
+  maxPostSize: $MAX_POST_SIZE
 
 mysql:
   host: $MYSQL_HOST
   database: $MYSQL_DATABASE
   user: $MYSQL_USER
   password: $MYSQL_PASSWORD
+
+editors:
+- mosaico
+- mosaicoWithFsTemplate
+
+enabledLanguages:
+- en-US
+
+tagLanguages:
+- simple
+
+log:
+  level: $LOG_LEVEL
+
+reports:
+  enabled: $WITH_REPORTS
+
 
 redis:
   enabled: $WITH_REDIS
@@ -81,7 +124,20 @@ builtinZoneMTA:
   poolName: $POOL_NAME
 
 queue:
-  processes: 5
+  processes: $SENDER_PROCESSES
+
+  retention:
+    # Regular and RSS campaign. Once this expires, the campaign is considered finished. The remaining recipients
+    # are included in the set of those recipients to whom the message would be delivered if the campaign is again started.
+    campaign: $RETENTION_CAMPAIGN
+    # Triggered campaign. Once this expires, the message gets discarded.
+    triggered: $RETENTION_TRIGGERED   # 1 day
+    # Test send (in campaign or template)
+    test: $RETENTION_TEST          # 5 minutes
+    # Subscription and password reset related emails
+    subscription: $RETENTION_SUBSCRIPTION  # 5 minutes
+    # Transactional emails sent via API (i.e. /templates/:templateId/send)
+    apiTransactional: $RETENTION_API  # 60 minutes
 EOT
 
     # Manage LDAP if enabled
