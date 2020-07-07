@@ -2,33 +2,37 @@
     <mj-head>
         <mj-title>{{title}}</mj-title>
         <mj-font name="Lato" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic" />
+        <mj-font name="gill-sans-nova" href="https://use.typekit.net/dlj2snh.css" />
         <mj-attributes>
-            <mj-all font-size="15px" color="#2D3E4F" font-family="Lato, Helvetica, Arial, sans-serif" />
-            <mj-class name="h1" font-size="42px" line-height="68px" color="#b4bcc2" />
-            <mj-class name="h3" font-size="24px" line-height="32px" />
-            <mj-class name="p"  font-size="15px" line-height="24px" />
-            <mj-class name="small"  font-size="12px" line-height="16px" color="#999999" />
+            <mj-all font-size="15px" color="#2D3E4F" font-family="gill-sans-nova, Arial, sans-serif" />
+            <mj-class name="h1" font-size="36px" font-weight="bold" line-height="68px" align="center" />
+            <mj-class name="h3" font-size="24px" line-height="32px" align="center"/>
+            <mj-class name="p"  font-size="15px" line-height="24px" align="center"/>
+            <mj-class name="a"  font-size="15px" line-height="24px" align="center" />
+            <mj-class name="small"  font-size="12px" line-height="16px" color="#999999" align="center" />
             <mj-class name="hr" border-width="1px" border-style="solid" border-color="#e4e5e6" />
-            <mj-class name="button" font-size="16px" background-color="#2D3E4F" color="white" align="left" inner-padding="16px 24px" border-radius="6px" />
+            <mj-class name="button" font-size="16px" background-color="#14245F" color="white" align="center" inner-padding="16px 24px" border-radius="6px" />
             <mj-class name="footer-text" font-size="12px" line-height="18px" color="#999999" />
         </mj-attributes>
     </mj-head>
-    <mj-body width="560px" background-color="#ffffff">
+
+    <mj-body width="560px" background-color="#f6f6f6">
         <mj-raw>
             {{#if isWeb}}
                 <style>
                     {{{formInputStyle}}}
-                    .alert { max-width: 520px; font-family: Lato, Helvetica, Arial, sans-serif; }
+                    .alert { max-width: 520px; font-family: gill-sans-nova, Arial, sans-serif; }
                 </style>
             {{/if}}
         </mj-raw>
 
-        <mj-section padding-bottom="0">
+        <mj-section padding-bottom="0" background-color="#ffffff">
             <mj-column>
+              <mj-image width="300px" src="https://thon.org/wp-content/uploads/2018/01/ShutterShade145_2.png" />
                 <mj-text mj-class="h1">
                     {{title}}
                 </mj-text>
-                <mj-divider mj-class="hr"/>
+                <mj-image width="560px" src="https://dash.thon.org/static/img/THON_Spacer.png" />
             </mj-column>
         </mj-section>
 
@@ -44,6 +48,7 @@
             <mj-column>
                 <mj-text mj-class="small" font-style="italic">
                     <!-- POST ADDRESS -->
+                    227D Hetzel Union Building, University Park, PA 16802
                 </mj-text>
             </mj-column>
         </mj-section>
