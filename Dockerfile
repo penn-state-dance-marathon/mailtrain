@@ -34,6 +34,19 @@ RUN set -ex; \
 # Final Image
 FROM node:10-alpine
 
+# Install tools for Amazon EFS mount helper
+RUN apk add --no-cache curl python2 python2-dev py2-pip gcc libffi-dev musl-dev openssl-dev make bash \
+    && pip install awsebcli awscli \
+    && python --version && pip freeze
+RUN apk add --no-cache git dpkg binutils nfs-utils stunnel openssl util-linux \
+    && mkdir -p /tmp/efsutils \
+    && cd /tmp/efsutils \
+    && git clone https://github.com/aws/efs-utils . \
+    && ./build-deb.sh \
+    && dpkg --force-all -i ./build/amazon-efs-utils*.deb \
+    && rm -Rf /tmp/efsutils
+RUN sed -i 's/#region = us-east-1/region = us-east-2/g' /etc/amazon/efs/efs-utils.conf && cat /etc/amazon/efs/efs-utils.conf
+
 WORKDIR /app/
 
 # Install system dependencies

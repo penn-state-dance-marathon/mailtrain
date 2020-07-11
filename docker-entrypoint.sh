@@ -194,5 +194,10 @@ if [ "$WITH_ZONE_MTA" = "true" ]; then
   while ! nc -z $MONGO_HOST 27017; do sleep 1; done
 fi
 
+# Mount the EFS if the env var is set
+if [ ! -z "$EFS_MOUNT" ]; then
+  mount -t efs $EFS_MOUNT:/ /app/server/files/template
+fi
+
 cd server
 NODE_ENV=production node index.js
