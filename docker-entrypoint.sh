@@ -196,7 +196,7 @@ fi
 
 # Mount the EFS if the env var is set
 if [ ! -z "$EFS_MOUNT" ]; then
-  sudo mount -t efs $EFS_MOUNT:/ /app/server
+  mount -t efs $EFS_MOUNT:/ /tmp
 fi
 
 cd server
