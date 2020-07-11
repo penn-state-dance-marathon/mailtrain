@@ -196,7 +196,7 @@ fi
 
 # Mount the EFS if the env var is set
 if [ ! -z "$EFS_MOUNT" ]; then
-  mount -t efs $EFS_MOUNT:/ /app/server/files/template
+  mount -t efs $EFS_MOUNT:/ /app/server
 fi
 
 cd server
