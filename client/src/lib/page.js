@@ -12,7 +12,7 @@ import mailtrainConfig from "mailtrainConfig";
 import styles from "./styles.scss";
 import {getRoutes, renderRoute, Resolver, SectionContentContext, withPageHelpers} from "./page-common";
 import {getBaseDir} from "./urls";
-import {createComponentMixin, withComponentMi;xins} from "./decorator-helpers";
+import {createComponentMixin, withComponentMixins} from "./decorator-helpers";
 import {getLang} from "../../../shared/langs";
 import Logo from "../../static/thon_mailtrain.png";
 
