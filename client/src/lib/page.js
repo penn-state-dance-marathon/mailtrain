@@ -12,9 +12,9 @@ import mailtrainConfig from "mailtrainConfig";
 import styles from "./styles.scss";
 import {getRoutes, renderRoute, Resolver, SectionContentContext, withPageHelpers} from "./page-common";
 import {getBaseDir} from "./urls";
-import {createComponentMixin, withComponentMixins} from "./decorator-helpers";
+import {createComponentMixin, withComponentMi;xins} from "./decorator-helpers";
 import {getLang} from "../../../shared/langs";
-import Logo from "../../static/shuttershade_main.png";
+import Logo from "../../static/thon_mailtrain.png";
 
 export { withPageHelpers }
 
@@ -189,7 +189,7 @@ function renderFrameWithContent(t, panelInFullScreen, showSidebar, primaryMenu, 
                         }
 
                         <Link className="navbar-brand" to="/">
-                            <div style="font-size: 18px;"><img height="22" src={Logo}/> Mailtrain</div>
+                            <div><img height="25" src={Logo}/></div>
                         </Link>
                         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#mtMainNavbar" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon"/>
