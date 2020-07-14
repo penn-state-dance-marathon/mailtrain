@@ -65,4 +65,4 @@ jobs:
             pip install awscli
             pip install boto3
             python mount_efs.py
-            aws ecs update-service --cluster mail-prod --service mail-prod --force-new-deployment
+            aws ecs update-service --cluster mail-prod --service mail-prod --force-new-deployment --task-definition mail-prod
