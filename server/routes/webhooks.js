@@ -2,7 +2,7 @@
 
 const router = require('../lib/router-async').create();
 const request = require('request-promise');
-const blacklist = require('../../models/blacklist');
+const blacklist = require('../models/blacklist');
 const campaigns = require('../models/campaigns');
 const sendConfigurations = require('../models/send-configurations');
 const contextHelpers = require('../lib/context-helpers');
