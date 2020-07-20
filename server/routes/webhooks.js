@@ -2,6 +2,7 @@
 
 const router = require('../lib/router-async').create();
 const request = require('request-promise');
+const blacklist = require('../../models/blacklist');
 const campaigns = require('../models/campaigns');
 const sendConfigurations = require('../models/send-configurations');
 const contextHelpers = require('../lib/context-helpers');
@@ -46,6 +47,9 @@ router.postAsync('/aws', async (req, res) => {
                         case 'Bounce':
                             await campaigns.changeStatusByMessage(contextHelpers.getAdminContext(), message, CampaignMessageStatus.BOUNCED, req.body.Message.bounce.bounceType === 'Permanent');
                             log.verbose('AWS', 'Marked message %s as bounced', req.body.Message.mail.messageId);
+
+                            // blacklist each bounced email address
+                            await req.body.Message.mail.destination.forEach(bounce => blacklist.add(contextHelpers.getAdminContext(), bounce.emailAddress));
                             break;
 
                         case 'Complaint':
