@@ -49,7 +49,7 @@ router.postAsync('/aws', async (req, res) => {
                             log.verbose('AWS', 'Marked message %s as bounced', req.body.Message.mail.messageId);
 
                             // blacklist each bounced email address
-                            await req.body.Message.mail.destination.forEach(bounce => blacklist.add(contextHelpers.getAdminContext(), bounce.emailAddress));
+                            await req.body.Message.mail.destination.forEach(bounce => blacklist.add(contextHelpers.getAdminContext(), bounce));
                             break;
 
                         case 'Complaint':
