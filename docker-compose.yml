@@ -22,9 +22,9 @@ services:
     - mongo-data:/data/db
 
   mailtrain:
-    build: .
     env_file:
-      - ./development.env
+      - ./local.env
+    build: .
     ports:
     - "3000:3000"
     - "3003:3003"
@@ -32,13 +32,19 @@ services:
     volumes:
     - mailtrain-files:/app/server/files
 
-  nginx:
-    image: nginx:latest
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+  admin:
+    container_name: admin
+    depends_on:
+      - mysql
+    restart: always
+    image: phpmyadmin/phpmyadmin
     ports:
-      - 80:80
-      - 443:443
+      - 3001:80
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: mailtrain
+    links:
+      - mysql
 
 volumes:
   mysql-data:
