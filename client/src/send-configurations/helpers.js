@@ -141,6 +141,7 @@ export function getMailerTypes(t) {
 
     const sesRegionOptions = [
         { key: 'us-east-1', label: t('useast1')},
+        { key: 'us-east-2', label: t('useast2')},
         { key: 'us-west-2', label: t('uswest2')},
         { key: 'eu-west-1', label: t('euwest1')}
     ];

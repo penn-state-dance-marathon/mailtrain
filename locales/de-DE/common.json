@@ -825,6 +825,7 @@
   "useTls –UsuallySelectedForPort465": "TLS benutzen – normalerweise für Port 465",
   "useStarttls –UsuallySelectedForPort587": "STARTTLS benutzen – normalerweise ü Port 587 und 25",
   "useast1": "US-EAST-1",
+  "useast2": "US-EAST-2",
   "uswest2": "US-WEST-2",
   "euwest1": "EU-WEST-1",
   "builtinZoneMta": "Built-in ZoneMTA",
