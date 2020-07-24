@@ -150,7 +150,7 @@ router.getAsync('/confirm/unsubscribe/:cid', async (req, res) => {
     const confirmation = await takeConfirmationAndValidate(req, 'unsubscribe', () => new interoperableErrors.InvalidConfirmationForUnsubscriptionError('Request invalid or already completed. If your unsubscription request is still pending, please unsubscribe again.'));
     const list = await lists.getById(contextHelpers.getAdminContext(), confirmation.list);
     const data = confirmation.data;
-
+    // CUSTOM UNSUBSCRIBE BEHAVIOR GOES HERE
     const subscription = await subscriptions.unsubscribeByCidAndGet(contextHelpers.getAdminContext(), list.id, data.subscriptionCid, data.campaignCid);
 
     await mailHelpers.sendUnsubscriptionConfirmed(req.locale, list, subscription.email, subscription);
