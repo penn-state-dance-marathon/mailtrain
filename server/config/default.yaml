@@ -332,7 +332,7 @@ defaultRoles:
       permissions: [view, createTemplate, createCampaign]
       children:
         sendConfiguration: [viewPublic]
-        channel: [view]
+        channel: [view, createCampaign]
         campaign: [view, edit, delete, viewFiles, manageFiles, viewAttachments, manageAttachments, viewTriggers, manageTriggers, sendToTestUsers, viewStats, fetchRss]
         template: [view, edit, delete, viewFiles, manageFiles, sendToTestUsers]
         mosaicoTemplate: [view, viewFiles]
