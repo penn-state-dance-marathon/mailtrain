@@ -301,7 +301,6 @@ async function createApp(appType) {
         app.use('/rest', sendConfigurationsRest);
         app.use('/rest', usersRest);
         app.use('/rest', accountRest);
-        app.use('/rest', channelsRest);
         app.use('/rest', campaignsRest);
         app.use('/rest', triggersRest);
         app.use('/rest', listsRest);
@@ -323,6 +322,11 @@ async function createApp(appType) {
             app.use('/rest', reportTemplatesRest);
             app.use('/rest', reportsRest);
         }
+
+        if (config.channels && config.channels.enabled === true) {
+            app.use('/rest', channelsRest);
+        }
+
         install404Fallback('/rest');
     }
 

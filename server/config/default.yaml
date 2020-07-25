@@ -236,6 +236,10 @@ reports:
   # then it's safer to switch off the reporting functionality below.
   enabled: true
 
+channels:
+  # feature added in a recent update. Give an option to disable it.
+  enabled: true
+
 testServer:
   # Starts a vanity server that redirects all mail to /dev/null
   # Mostly needed for local development
