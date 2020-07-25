@@ -7,6 +7,7 @@ import {DropdownLink, LinkButton, requiresAuthenticatedUser, Title, Toolbar, wit
 import {withErrorHandling} from '../lib/error-handling';
 import {Table} from '../lib/table';
 import moment from 'moment';
+import mailtrainConfig from "mailtrainConfig";
 import {CampaignSource, CampaignStatus, CampaignType} from "../../../shared/campaigns";
 import {getCampaignLabels} from "./helpers";
 import {tableAddDeleteButton, tableRestActionDialogInit, tableRestActionDialogRender} from "../lib/modals";
@@ -37,7 +38,7 @@ export default class List extends Component {
     static propTypes = {
         permissions: PropTypes.object,
         channel: PropTypes.object
-    }
+    };
 
     render() {
         const t = this.props.t;
@@ -64,7 +65,7 @@ export default class List extends Component {
         columns.push({ data: 3, title: t('description') });
         columns.push({ data: 4, title: t('type'), render: data => this.campaignTypeLabels[data] });
 
-        if (!channel) {
+        if (!channel && mailtrainConfig.channelsEnabled) {
             columns.push({ data: 5, title: t('Channel') });
         }
 

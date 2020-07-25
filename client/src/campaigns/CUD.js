@@ -728,7 +728,11 @@ export default class CUD extends Component {
 
                     <TextArea id="description" label={t('description')}/>
 
-                    <TableSelect id="channel" label={t('Channel')} withHeader withClear dropdown dataUrl='rest/channels-with-create-campaign-permission-table' columns={channelsColumns} selectionLabelIndex={1} />
+                    {mailtrainConfig.channelsEnabled &&
+                        <TableSelect id="channel" label={t('Channel')} withHeader withClear dropdown
+                                     dataUrl='rest/channels-with-create-campaign-permission-table'
+                                     columns={channelsColumns} selectionLabelIndex={1}/>
+                    }
 
                     {extraSettings}
 

@@ -28,10 +28,14 @@ import {getUrl} from "./lib/urls";
 import {withComponentMixins} from "./lib/decorator-helpers";
 import Update from "./settings/Update";
 
-const topLevelMenuKeys = ['lists', 'channels', 'templates', 'campaigns'];
+const topLevelMenuKeys = ['lists', 'templates', 'campaigns'];
 
 if (mailtrainConfig.reportsEnabled) {
     topLevelMenuKeys.push('reports');
+}
+
+if (mailtrainConfig.channelsEnabled) {
+    topLevelMenuKeys.splice(1, 0, 'channels');
 }
 
 
