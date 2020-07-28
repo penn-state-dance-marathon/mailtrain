@@ -48,6 +48,7 @@ async function getAuthenticatedConfig(context) {
         mosaico: config.mosaico,
         verpEnabled: config.verp.enabled,
         reportsEnabled: config.reports.enabled,
+        channelsEnabled: config.channels.enabled,
         mapsApiKey: setts.mapsApiKey,
         builtinZoneMTAEnabled: config.builtinZoneMTA.enabled,
         shoutout: setts.shoutout
