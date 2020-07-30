@@ -999,7 +999,7 @@
   "subscriptionConfirmed": "Subscription Confirmed",
   "listEmailAddressAlreadyRegistered": "{{list}}: Email Address Already Registered",
   "listPleaseConfirmEmailChangeIn": "{{list}}: Please Confirm Email Change in Subscription",
-  "pleaseConfirmSubscription": "Please Confirm Subscription",
+  "pleaseConfirmSubscription": "Confirm Subscription to {{list}}",
   "listPleaseConfirmUnsubscription": "{{list}}: Please Confirm Unsubscription",
   "listUnsubscriptionConfirmed": "{{list}}: Unsubscription Confirmed",
   "invalidEmailAddressEmailMxRecordNotFound": "Invalid email address \"{{email}}\": MX record not found for domain",
