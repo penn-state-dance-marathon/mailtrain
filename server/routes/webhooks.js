@@ -48,16 +48,18 @@ router.postAsync('/aws', async (req, res) => {
                             await campaigns.changeStatusByMessage(contextHelpers.getAdminContext(), message, CampaignMessageStatus.BOUNCED, req.body.Message.bounce.bounceType === 'Permanent');
                             log.verbose('AWS', 'Marked message %s as bounced', req.body.Message.mail.messageId);
 
-                            // blacklist each bounced email address
-                            await req.body.Message.mail.destination.forEach(bounce => {
-                                try {
-                                    blacklist.add(contextHelpers.getAdminContext(), bounce);
-                                    log.verbose('AWS', 'Blacklisted address %s', bounce);
-                                }
-                                catch(err) {
-                                    log.verbose('AWS', 'Unable to blacklist address %s', bounce);
-                                }
-                            });
+                            // blacklist each permanently bounced email address
+                            if (req.body.Message.bounce.bounceType === 'Permanent') {
+                                await req.body.Message.mail.destination.forEach(bounce => {
+                                    try {
+                                        blacklist.add(contextHelpers.getAdminContext(), bounce);
+                                        log.verbose('AWS', 'Blacklisted address %s', bounce);
+                                    }
+                                    catch(err) {
+                                        log.verbose('AWS', 'Unable to blacklist address %s', bounce);
+                                    }
+                                });
+                            }
                             break;
 
                         case 'Complaint':
