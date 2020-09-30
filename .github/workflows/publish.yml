@@ -60,10 +60,3 @@ jobs:
           uses: actions/setup-python@v1
           with:
             python-version: '3.x'
-        - name: Mount file system and initiate deployment
-          run: |
-            python -m pip install --upgrade pip
-            pip install awscli
-            pip install boto3
-            python mount_efs.py
-            aws ecs update-service --cluster mail-prod --service mail-prod --force-new-deployment --task-definition mail-prod
