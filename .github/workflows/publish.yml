@@ -60,3 +60,6 @@ jobs:
           uses: actions/setup-python@v1
           with:
             python-version: '3.x'
+        - name: Initiate deployment
+          run: |	
+            aws ecs update-service --cluster mail-prod --service mail-prod --force-new-deployment --task-definition mail-prod
