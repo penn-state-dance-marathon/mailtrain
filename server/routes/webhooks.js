@@ -53,10 +53,10 @@ router.postAsync('/aws', async (req, res) => {
                                 await req.body.Message.mail.destination.forEach(bounce => {
                                     try {
                                         blacklist.add(contextHelpers.getAdminContext(), bounce);
-                                        log.verbose('AWS', 'Blacklisted address %s', bounce);
+                                        log.verbose('AWS', 'Blacklisted address %s (bounce)', bounce);
                                     }
                                     catch(err) {
-                                        log.verbose('AWS', 'Unable to blacklist address %s', bounce);
+                                        log.verbose('AWS', 'Unable to blacklist address %s (bounce)', bounce);
                                     }
                                 });
                             }
@@ -66,6 +66,17 @@ router.postAsync('/aws', async (req, res) => {
                             if (req.body.Message.complaint) {
                                 await campaigns.changeStatusByMessage(contextHelpers.getAdminContext(), message, CampaignMessageStatus.COMPLAINED, true);
                                 log.verbose('AWS', 'Marked message %s as complaint', req.body.Message.mail.messageId);
+
+                                // blacklist each complained email address
+                                await req.body.Message.complaint.complainedRecipients.forEach(complaint => {
+                                    try {
+                                        blacklist.add(contextHelpers.getAdminContext(), complaint.emailAddress);
+                                        log.verbose('AWS', 'Blacklisted address %s (complaint)', complaint.emailAddress);
+                                    }
+                                    catch(err) {
+                                        log.verbose('AWS', 'Unable to blacklist address %s (complaint)', complaint.emailAddress);
+                                    }
+                                });
                             }
                             break;
                     }
