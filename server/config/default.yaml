@@ -133,6 +133,17 @@ verp:
   port: 25
   host: 0.0.0.0
 
+keycloak:
+  # enable keycloak OpenID connect user backend
+  enabled: true
+  host: https://localhost:3000
+  clientId: mailtrain
+  realm: mailtrain
+  clientSecret: secret
+  callbackUrl: https://localhost:3000/rest/login/callback
+  newUserRole: nobody
+  newUserNamespaceId: 1
+
 ldap:
   # enable to use ldap user backend
   enabled: false

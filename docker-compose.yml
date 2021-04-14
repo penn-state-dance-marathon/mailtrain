@@ -29,8 +29,11 @@ services:
     - "3000:3000"
     - "3003:3003"
     - "3004:3004"
+    - "9229:9229"
     volumes:
-    - mailtrain-files:/app/server/files
+      - ./server/lib:/app/server/lib
+      - ./server/models:/app/server/models
+      - ./client/src:/app/client/src
 
   admin:
     container_name: admin
@@ -50,5 +53,3 @@ volumes:
   mysql-data:
   redis-data:
   mongo-data:
-  mailtrain-files:
-

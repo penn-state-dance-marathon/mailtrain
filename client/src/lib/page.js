@@ -1,5 +1,6 @@
 'use strict';
 
+import axios from "./axios";
 import React, {Component} from "react";
 import i18n, {withTranslation} from './i18n';
 import PropTypes from "prop-types";
@@ -11,7 +12,7 @@ import {ActionLink, Button, DismissibleAlert, DropdownActionLink, Icon} from "./
 import mailtrainConfig from "mailtrainConfig";
 import styles from "./styles.scss";
 import {getRoutes, renderRoute, Resolver, SectionContentContext, withPageHelpers} from "./page-common";
-import {getBaseDir} from "./urls";
+import {getBaseDir, getUrl} from "./urls";
 import {createComponentMixin, withComponentMixins} from "./decorator-helpers";
 import {getLang} from "../../../shared/langs";
 import Logo from "../../static/thon_mailtrain.png";
@@ -445,9 +446,23 @@ export class SectionContent extends Component {
         this.setFlashMessage(severity, text);
     }
 
+    async redirectToKeycloakLoginFlow() {
+        await axios.get(getUrl('/rest/login'));
+    }
+
     ensureAuthenticated() {
         if (!mailtrainConfig.isAuthenticated) {
-            this.navigateTo('/login?next=' + encodeURIComponent(window.location.pathname));
+            if (mailtrainConfig.keycloakEnabled) {
+                try {
+                    this.redirectToKeycloakLoginFlow();
+                } catch(err) {
+                    log.info('Redirect to Keycloak login flow failed!');
+                    this.navigateTo('/login?next=' + encodeURIComponent(window.location.pathname));
+                }
+            }
+            else {
+                this.navigateTo('/login?next=' + encodeURIComponent(window.location.pathname));
+            }
         }
     }
 
@@ -462,16 +477,26 @@ export class SectionContent extends Component {
     errorHandler(error) {
         if (error instanceof interoperableErrors.NotLoggedInError) {
             if (window.location.pathname !== '/login') { // There may be multiple async requests failing at the same time. So we take the pathname only from the first one.
-                this.navigateTo('/login?next=' + encodeURIComponent(window.location.pathname));
+                // this.navigateTo('/login?next=' + encodeURIComponent(window.location.pathname));
+                if (mailtrainConfig.keycloakEnabled) {
+                    try {
+                        this.redirectToKeycloakLoginFlow();
+                    } catch (err) {
+                        log.info('Redirect to Keycloak login flow failed!');
+                        this.navigateTo('/login?next=' + encodeURIComponent(window.location.pathname));
+                    }
+                } else {
+                    this.navigateTo('/login?next=' + encodeURIComponent(window.location.pathname));
+                }
+            } else if (error.response && error.response.data && error.response.data.message) {
+                console.error(error);
+                this.navigateToWithFlashMessage(this.props.root, 'danger', error.response.data.message);
+            } else {
+                console.error(error);
+                this.navigateToWithFlashMessage(this.props.root, 'danger', error.message);
             }
-        } else if (error.response && error.response.data && error.response.data.message) {
-            console.error(error);
-            this.navigateToWithFlashMessage(this.props.root, 'danger', error.response.data.message);
-        } else {
-            console.error(error);
-            this.navigateToWithFlashMessage(this.props.root, 'danger', error.message);
+            return true;
         }
-        return true;
     }
 
     async closeFlashMessage() {

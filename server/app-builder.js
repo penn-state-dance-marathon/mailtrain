@@ -364,7 +364,13 @@ async function createApp(appType) {
             // TODO: Render interoperable errors using a special client that does internationalization of the error message
 
             if (err instanceof interoperableErrors.NotLoggedInError) {
-                return res.redirect(getTrustedUrl('/login?next=' + encodeURIComponent(req.originalUrl)));
+                log.info('here');
+                if (config.keycloak.enabled) {
+                    return res.redirect(getTrustedUrl('/rest/login?next=' + encodeURIComponent(req.originalUrl)));
+                }
+                else {
+                    return res.redirect(getTrustedUrl('/login?next=' + encodeURIComponent(req.originalUrl)));
+                }
             } else {
                 let publicPath;
                 if (appType === AppType.TRUSTED) {

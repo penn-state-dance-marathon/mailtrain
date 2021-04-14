@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "debug": "node --inspect=0.0.0.0 index.js",
     "sqlinit": "node setup/sql/init.js",
     "sqldump": "node setup/sql/dump.js | sed -e '/^\\/\\*.*\\*\\/;$/d' -e 's/.[0-9]\\{4\\}-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]./NOW()/g' > setup/sql/mailtrain${DUMP_NAME_SUFFIX}.sql",
     "sqldrop": "node setup/sql/drop.js",
@@ -42,6 +43,7 @@
     "posix": "^4.1.2"
   },
   "dependencies": {
+    "@exlinc/keycloak-passport": "^1.0.2",
     "aws-sdk": "^2.601.0",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.7.2",
