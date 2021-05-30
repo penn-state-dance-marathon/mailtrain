@@ -3,7 +3,7 @@
 const config = require('../lib/config');
 const knex = require('../lib/knex');
 const hasher = require('node-object-hash')();
-const shortid = require('shortid');
+const shortid = require('../lib/shortid');
 const dtHelpers = require('../lib/dt-helpers');
 const interoperableErrors = require('../../shared/interoperable-errors');
 const shares = require('./shares');
@@ -62,7 +62,7 @@ fieldTypes.date = {
     afterJSON: (groupedField, entity) => {
         const key = getFieldColumn(groupedField);
         if (key in entity) {
-            entity[key] = entity[key] ? moment(entity[key]).toISOString() : null;
+            entity[key] = entity[key] ? moment(entity[key]).utc().format("YYYY-MM-DD HH:mm:ss") : null;
         }
     },
     listRender: (groupedField, value) => formatDate(groupedField.settings.dateFormat, value)
@@ -72,7 +72,7 @@ fieldTypes.birthday = {
     afterJSON: (groupedField, entity) => {
         const key = getFieldColumn(groupedField);
         if (key in entity) {
-            entity[key] = entity[key] ? moment(entity[key]).toISOString() : null;
+            entity[key] = entity[key] ? moment(entity[key]).utc().format("YYYY-MM-DD HH:mm:ss") : null;
         }
     },
     listRender: (groupedField, value) => formatBirthday(groupedField.settings.dateFormat, value)
@@ -866,13 +866,14 @@ async function getListsWithEmail(context, email) {
     // FIXME - this methods is rather suboptimal if there are many lists. It quite needs permission caching in shares.js
 
     return await knex.transaction(async tx => {
-        const lsts = await tx('lists').select(['id', 'cid', 'name']);
+        const lsts = await tx('lists').select(['id', 'cid', 'name', 'description']);
         const result = [];
 
         for (const list of lsts) {
             await shares.enforceEntityPermissionTx(tx, context, 'list', list.id, 'viewSubscriptions');
             const entity = await tx(getSubscriptionTableName(list.id)).where('hash_email', hashEmail(email)).whereNotNull('email').first();
             if (entity) {
+               list.status=entity.status;
                 result.push(list);
             }
         }

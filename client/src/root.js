@@ -28,7 +28,7 @@ import {getUrl} from "./lib/urls";
 import {withComponentMixins} from "./lib/decorator-helpers";
 import Update from "./settings/Update";
 
-const topLevelMenuKeys = ['lists', 'templates', 'campaigns'];
+const topLevelMenuKeys = ['lists', 'channels', 'templates', 'campaigns'];
 
 if (mailtrainConfig.reportsEnabled) {
     topLevelMenuKeys.push('reports');
@@ -100,7 +100,8 @@ class Root extends Component {
                                 {getLanguageChooser(t)}
                                 <NavDropdown menuClassName="dropdown-menu-right" label={mailtrainConfig.user.username} icon="user">
                                     <DropdownLink to="/account"><Icon icon='user'/> {t('account')}</DropdownLink>
-                                    <DropdownActionLink onClickAsync={::this.logout}><Icon icon='sign-out-alt'/> {t('logOut')}</DropdownActionLink>
+                                    {mailtrainConfig.authMethod == 'cas' && <DropdownLink to="/cas/logout" forceReload><Icon icon="sign-out-alt"/> {t('logOut')}</DropdownLink>}
+                                    {mailtrainConfig.authMethod != 'cas' && <DropdownActionLink onClickAsync={::this.logout}><Icon icon='sign-out-alt'/> {t('logOut')}</DropdownActionLink>}
                                 </NavDropdown>
                             </ul>
                         </>

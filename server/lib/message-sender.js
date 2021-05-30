@@ -24,7 +24,7 @@ const blacklist = require('../models/blacklist');
 const libmime = require('libmime');
 const { enforce, hashEmail } = require('./helpers');
 const senders = require('./senders');
-const shortid = require('shortid');
+const shortid = require('./shortid');
 
 const MessageType = {
     REGULAR: 0,
@@ -89,24 +89,31 @@ class MessageSender {
                 this.useVerpSenderHeader = this.useVerp && !this.sendConfiguration.verp_disable_sender_header;
 
 
+                // These IFs are not mutually exclusive because there are situations when listId is provided, but we want to collect all lists of the campaign
+                // in order to support tags like LINK_PUBLIC_SUBSCRIBE, LIST_ID_<index>, PUBLIC_LIST_ID_<index>
                 if (settings.listId) {
                     const list = await lists.getByIdTx(tx, contextHelpers.getAdminContext(), settings.listId);
                     this.listsById.set(list.id, list);
                     this.listsByCid.set(list.cid, list);
                     this.listsFieldsGrouped.set(list.id, await fields.listGroupedTx(tx, list.id));
+                }
 
-                } else if (settings.listCid) {
+                if (settings.listCid && !this.listsByCid.has(settings.listCid)) {
                     const list = await lists.getByCidTx(tx, contextHelpers.getAdminContext(), settings.listCid);
                     this.listsById.set(list.id, list);
                     this.listsByCid.set(list.cid, list);
                     this.listsFieldsGrouped.set(list.id, await fields.listGroupedTx(tx, list.id));
 
-                } else if (this.campaign && this.campaign.lists) {
+                }
+
+                if (this.campaign && this.campaign.lists) {
                     for (const listSpec of this.campaign.lists) {
-                        const list = await lists.getByIdTx(tx, contextHelpers.getAdminContext(), listSpec.list);
-                        this.listsById.set(list.id, list);
-                        this.listsByCid.set(list.cid, list);
-                        this.listsFieldsGrouped.set(list.id, await fields.listGroupedTx(tx, list.id));
+                        if (!this.listsById.has(listSpec.list)) {
+                            const list = await lists.getByIdTx(tx, contextHelpers.getAdminContext(), listSpec.list);
+                            this.listsById.set(list.id, list);
+                            this.listsByCid.set(list.cid, list);
+                            this.listsFieldsGrouped.set(list.id, await fields.listGroupedTx(tx, list.id));
+                        }
                     }
                 }
 
@@ -196,7 +203,7 @@ class MessageSender {
             renderTags = true;
 
         } else if (campaign && campaign.source === CampaignSource.URL) {
-            const form = tools.getMessageLinks(campaign, list, subscriptionGrouped);
+            const form = tools.getMessageLinks(campaign, this.listsById, list, subscriptionGrouped);
             for (const key in mergeTags) {
                 form[key] = mergeTags[key];
             }
@@ -218,9 +225,9 @@ class MessageSender {
             if (response.statusCode !== 200) {
                 const statusError = new Error(`Received status code ${response.statusCode} from ${sourceUrl}`);
                 if (response.statusCode >= 500) {
-                  statusError.campaignMessageErrorType = CampaignMessageErrorType.TRANSIENT;
+                    statusError.campaignMessageErrorType = CampaignMessageErrorType.PERMANENT;
                 } else {
-                  statusError.campaignMessageErrorType = CampaignMessageErrorType.PERMANENT;
+                    statusError.campaignMessageErrorType = CampaignMessageErrorType.TRANSIENT;
                 }
                 throw statusError;
             }
@@ -245,20 +252,20 @@ class MessageSender {
 
 
         if (renderTags) {
-            if (this.campaign) {
-                html = await links.updateLinks(html, this.tagLanguage, mergeTags, campaign, list, subscriptionGrouped);
+            if (campaign) {
+                html = await links.updateLinks(html, this.tagLanguage, mergeTags, campaign, this.listsById, list, subscriptionGrouped);
             }
 
             // When no list and subscriptionGrouped is provided, formatCampaignTemplate works the same way as formatTemplate
-            html = tools.formatCampaignTemplate(html, this.tagLanguage, mergeTags, true, campaign, list, subscriptionGrouped);
+            html = tools.formatCampaignTemplate(html, this.tagLanguage, mergeTags, true, campaign, this.listsById, list, subscriptionGrouped);
         }
 
-        const generateText = !!(text || '').trim();
+        const generateText = !(text || '').trim();
         if (generateText) {
             text = htmlToText.fromString(html, {wordwrap: 130});
         } else {
             // When no list and subscriptionGrouped is provided, formatCampaignTemplate works the same way as formatTemplate
-            text = tools.formatCampaignTemplate(text, this.tagLanguage, mergeTags, false, campaign, list, subscriptionGrouped)
+            text = tools.formatCampaignTemplate(text, this.tagLanguage, mergeTags, false, campaign, this.listsById, list, subscriptionGrouped)
         }
 
         return {
@@ -348,19 +355,19 @@ class MessageSender {
             let listUnsubscribe = null;
             if (!list.listunsubscribe_disabled) {
                 listUnsubscribe = campaign && campaign.unsubscribe_url
-                    ? tools.formatCampaignTemplate(campaign.unsubscribe_url, this.tagLanguage, mergeTags, false, campaign, list, subscriptionGrouped)
+                    ? tools.formatCampaignTemplate(campaign.unsubscribe_url, this.tagLanguage, mergeTags, false, campaign, this.listsById, list, subscriptionGrouped)
                     : getPublicUrl('/subscription/' + list.cid + '/unsubscribe/' + subscriptionGrouped.cid);
             }
 
             to = {
-                name: list.to_name === null ? undefined : tools.formatCampaignTemplate(list.to_name, toNameTagLangauge, mergeTags, false, campaign, list, subscriptionGrouped),
+                name: list.to_name === null ? undefined : tools.formatCampaignTemplate(list.to_name, toNameTagLangauge, mergeTags, false, campaign, this.listsById, list, subscriptionGrouped),
                 address: subscriptionGrouped.email
             };
 
             subject = this.subject;
 
             if (this.tagLanguage) {
-                subject = tools.formatCampaignTemplate(this.subject, this.tagLanguage, mergeTags, false, campaign, list, subscriptionGrouped);
+                subject = tools.formatCampaignTemplate(this.subject, this.tagLanguage, mergeTags, false, campaign, this.listsById, list, subscriptionGrouped);
             }
 
             headers = {
@@ -449,7 +456,17 @@ class MessageSender {
         let response;
         let responseId = null;
 
-        const info = this.isMassMail ? await mailer.sendMassMail(mail) : await mailer.sendTransactionalMail(mail);
+        let info;
+        try {
+            info = this.isMassMail ? await mailer.sendMassMail(mail) : await mailer.sendTransactionalMail(mail);
+        } catch (err) {
+            if (err.responseCode >= 500) {
+                err.campaignMessageErrorType = CampaignMessageErrorType.PERMANENT;
+            } else {
+                err.campaignMessageErrorType = CampaignMessageErrorType.TRANSIENT;
+            }
+            throw err;
+        }
 
         log.verbose('MessageSender', `response: ${info.response}   messageId: ${info.messageId}`);
 

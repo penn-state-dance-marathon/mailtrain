@@ -3,41 +3,21 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {withTranslation} from '../lib/i18n';
-import {LinkButton, requiresAuthenticatedUser, Title, withPageHelpers} from '../lib/page'
+import {requiresAuthenticatedUser, Title, withPageHelpers} from '../lib/page'
 import {
-    AlignedRow,
     Button,
     ButtonRow,
-    CheckBox,
-    Dropdown,
-    Fieldset,
-    filterData,
     Form,
-    FormSendMethod,
-    InputField,
-    StaticField,
     TableSelect,
-    TextArea,
     withForm,
     withFormErrorHandlers
 } from '../lib/form';
-import {withAsyncErrorHandler, withErrorHandling} from '../lib/error-handling';
-import {getDefaultNamespace, NamespaceSelect, validateNamespace} from '../lib/namespace';
-import {DeleteModalDialog} from "../lib/modals";
-import mailtrainConfig from 'mailtrainConfig';
-import {getTagLanguages, getTemplateTypes, getTypeForm, ResourceType} from '../templates/helpers';
-import axios from '../lib/axios';
-import styles from "../lib/styles.scss";
-import campaignsStyles from "./styles.scss";
-import {getUrl} from "../lib/urls";
-import {campaignOverridables, CampaignSource, CampaignStatus, CampaignType} from "../../../shared/campaigns";
+import {withErrorHandling} from '../lib/error-handling';
+import {getTagLanguages, getTemplateTypes, ResourceType} from '../templates/helpers';
 import moment from 'moment';
 import {getMailerTypes} from "../send-configurations/helpers";
 import {getCampaignLabels} from "./helpers";
 import {withComponentMixins} from "../lib/decorator-helpers";
-import interoperableErrors from "../../../shared/interoperable-errors";
-import {Trans} from "react-i18next";
-import {Table} from "../lib/table";
 
 @withComponentMixins([
     withTranslation,
@@ -66,6 +46,7 @@ export default class Clone extends Component {
     }
 
     static propTypes = {
+        cloneFromChannel: PropTypes.object
     }
 
     componentDidMount() {
@@ -106,15 +87,22 @@ export default class Clone extends Component {
             { data: 10, title: t('namespace') }
         ];
 
+        let campaignSelect;
+        if (this.props.cloneFromChannel) {
+            campaignSelect = <TableSelect id="sourceCampaign" label={t('campaign')} withHeader dropdown dataUrl={`rest/campaigns-by-channel-table/${this.props.cloneFromChannel.id}`} columns={campaignsColumns} order={[4, 'desc']} selectionLabelIndex={1} help={t('selectCampaignToBeCloned')}/>
+        } else {
+            campaignSelect = <TableSelect id="sourceCampaign" label={t('campaign')} withHeader dropdown dataUrl='rest/campaigns-table' columns={campaignsColumns} order={[4, 'desc']} selectionLabelIndex={1} help={t('selectCampaignToBeCloned')}/>
+        }
+
         return (
             <div>
-                <Title>{t('Create campaign')}</Title>
+                <Title>{t('createCampaign')}</Title>
 
                 <Form stateOwner={this} onSubmitAsync={::this.submitHandler}>
-                    <TableSelect id="sourceCampaign" label={t('campaign')} withHeader dropdown dataUrl='rest/campaigns-table' columns={campaignsColumns} order={[4, 'desc']} selectionLabelIndex={1} help={t('Select campaign to be cloned.')}/>
+                    {campaignSelect}
 
                     <ButtonRow>
-                        <Button type="submit" className="btn-primary" icon="chevron-right" label={t('Next')}/>
+                        <Button type="submit" className="btn-primary" icon="chevron-right" label={t('next')}/>
                     </ButtonRow>
                 </Form>
             </div>

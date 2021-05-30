@@ -54,7 +54,9 @@ class Table extends Component {
         withHeader: PropTypes.bool,
         refreshInterval: PropTypes.number,
         pageLength: PropTypes.number,
-        order: PropTypes.array
+        order: PropTypes.array,
+        search: PropTypes.string, // initial value of the search field
+        searchCols: PropTypes.arrayOf(PropTypes.string), // should have same length as `columns`, set items to `null` to prevent search
     }
 
     static defaultProps = {
@@ -256,6 +258,7 @@ class Table extends Component {
 
                 column.type = 'html';
                 column.createdCell = createdCellFn;
+                column.render = () => '';
 
                 if (!('data' in column)) {
                     column.data = null;
@@ -287,6 +290,13 @@ class Table extends Component {
                 "<'row'<'col-sm-12'<'" + styles.dataTableTable + "'tr>>>" +
                 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
         };
+        if (this.props.search)
+            dtOptions.search = { search: this.props.search };
+        if (this.props.searchCols) {
+            dtOptions.searchCols = this.props.searchCols.map(value => value !== null ? ({
+                search: value,
+            }) : null)
+        }
 
         const self = this;
         dtOptions.createdRow = function(row, data) {
@@ -319,6 +329,31 @@ class Table extends Component {
                 }
             });
         };
+
+        const t = this.props.t;
+        dtOptions.language = {
+          "sEmptyTable":     t("noDataAvailableInTable"),
+          "sInfo":           t("showingStartToEndOfTotalEntries"),
+          "sInfoEmpty":      t("showing0To0Of0Entries"),
+          "sInfoFiltered":   t("filteredFromMaxTotalEntries"),
+          "sInfoPostFix":    t(""),
+          "sInfoThousands":  t("-1"),
+          "sLengthMenu":     t("showMenuEntries"),
+          "sLoadingRecords": t("loading-1"),
+          "sProcessing":     t("processing"),
+          "sSearch":         t("search"),
+          "sZeroRecords":    t("noMatchingRecordsFound"),
+          "oPaginate": {
+            "sFirst":    t("firs"),
+            "sLast":     t("last"),
+            "sNext":     t("next"),
+            "sPrevious": t("previous")
+          },
+          "oAria": {
+           "sSortAscending":  t("activateToSortColumnAscending"),
+           "sSortDescending": t("activateToSortColumnDescending")
+          }
+       }
 
         dtOptions.initComplete = function() {
             self.jqSelectInfo = jQuery('<div class="dataTable_selection_info"/>');
