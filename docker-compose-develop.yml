@@ -22,6 +22,8 @@ services:
     - mongo-data:/data/db
 
   mailtrain:
+    env_file:
+      - ./local.env
     build:
       context: .
       dockerfile: Dockerfile-Develop
@@ -31,8 +33,28 @@ services:
     - "3004:3004"
     volumes:
     - ./:/app
+    - client-node-modules:/app/client/node_modules
+    - server-node-modules:/app/server/node_modules
+    - shared-node-modules:/app/shared/node_modules
+    - zone-node-modules:/app/zone-mta/node_modules
+    - mvis-node-modules:/app/mvis/client/node_modules
+    - mvis2-node-modules:/app/mvis/server/node_modules
+    - ivis-client-node-modules:/app/mvis/ivis-core/client/node_modules
+    - ivis-server-node-modules:/app/mvis/ivis-core/server/node_modules
+    - ivis-shared-node-modules:/app/mvis/ivis-core/shared/node_modules
+    - ivis-embedding-node-modules:/app/mvis/ivis-core/embedding/node_modules
 
 volumes:
   mysql-data:
   redis-data:
   mongo-data:
+  client-node-modules:
+  server-node-modules:
+  shared-node-modules:
+  zone-node-modules:
+  mvis-node-modules:
+  mvis2-node-modules:
+  ivis-client-node-modules:
+  ivis-server-node-modules:
+  ivis-shared-node-modules:
+  ivis-embedding-node-modules:
