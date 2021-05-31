@@ -17,7 +17,14 @@ import {
 } from '../lib/form';
 import {withErrorHandling} from '../lib/error-handling';
 import mailtrainConfig from 'mailtrainConfig';
-import {getEditForm, getTagLanguages, getTemplateTypes, getTypeForm, ResourceType} from '../templates/helpers';
+import {
+    getEditForm,
+    getModals,
+    getTagLanguages,
+    getTemplateTypes,
+    getTypeForm,
+    ResourceType
+} from '../templates/helpers';
 import axios from '../lib/axios';
 import styles from "../lib/styles.scss";
 import {getUrl} from "../lib/urls";
@@ -132,10 +139,12 @@ export default class CustomContent extends Component {
     localValidateFormValues(state) {
         const t = this.props.t;
 
+        for (const key of state.keys()) {
+            state.setIn([key, 'error'], null);
+        }
+
         if (!state.getIn(['data_sourceCustom_tag_language', 'value'])) {
             state.setIn(['data_sourceCustom_tag_language', 'error'], t('tagLanguageMustBeSelected'));
-        } else {
-            state.setIn(['data_sourceCustom_tag_language', 'error'], null);
         }
 
         const customTemplateTypeKey = state.getIn(['data_sourceCustom_type', 'value']);
@@ -275,12 +284,13 @@ export default class CustomContent extends Component {
                     onHide={() => this.setState({showExportModal: false})}
                     getContentAsync={this.exportModalGetContentHandler}
                 />
+                {customTemplateTypeKey && getModals(this, customTemplateTypeKey, true)}
 
                 <Title>{t('editCustomContent')}</Title>
 
                 {!canModify &&
                 <div className="alert alert-warning" role="alert">
-                    <Trans><b>Warning!</b> You do not have necessary permissions to edit this campaign. Any changes that you perform here will be lost.</Trans>
+                    <Trans i18nKey="warning!YouDoNotHaveNecessaryPermissions"><b>Warning!</b> You do not have necessary permissions to edit this campaign. Any changes that you perform here will be lost.</Trans>
                 </div>
                 }
 
@@ -303,7 +313,7 @@ export default class CustomContent extends Component {
                                 <Button type="submit" className="btn-primary" icon="check" label={t('saveAndGoToStatus')} onClickAsync={async () => await this.submitHandler(CustomContent.AfterSubmitAction.STATUS)}/>
                             </>
                         }
-                        <Button className="btn-success" icon="at" label={t('Test send')} onClickAsync={async () => this.setState({showTestSendModal: true})}/>
+                        <Button className="btn-success" icon="at" label={t('testSend')} onClickAsync={async () => this.setState({showTestSendModal: true})}/>
                     </ButtonRow>
                 </Form>
             </div>

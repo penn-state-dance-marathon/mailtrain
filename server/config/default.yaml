@@ -55,6 +55,10 @@ enabledLanguages:
 # Inject custom scripts in subscription/layout.mjml.hbs
 # customSubscriptionScripts: [/custom/hello-world.js]
 
+# Customize the random string generation for cid
+cid:
+   alphabet: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+   length: 10
 
 # Enable to use Redis session cache or disable if Redis is not installed
 redis:
@@ -120,11 +124,10 @@ mysql:
   # Some installations, eg. MAMP can use a different port (8889)
   # MAMP users should also turn on Allow network access to MySQL otherwise MySQL might not be accessible
   port: 3306
-  charset: utf8mb4
   # The timezone configured on the MySQL server. This can be 'local', 'Z', or an offset in the form +HH:MM or -HH:MM
   # If the MySQL server runs on the same server as Mailtrain, use 'local'
   timezone: local
-
+  
 verp:
   # Enable to start an MX server that detects bounced messages using VERP
   # In most cases you do not want to use it
@@ -166,6 +169,18 @@ postfixBounce:
   port: 5699
   # allow connections from localhost only
   host: 127.0.0.1
+
+cas:
+  # enable to use CAS user backend
+  enabled: false
+  url: https://example.cas-server.com
+  # nameTag identifies the attribute to be used for user's full name
+  nameTag: username
+  # mailTag identifies the attribute to be used for user's email address
+  mailTag: mail
+  newUserRole: nobody
+  # Global namespace id
+  newUserNamespaceId: 1
 
 # extra options for nodemailer
 nodemailer:

@@ -25,7 +25,7 @@ import {withAsyncErrorHandler, withErrorHandling} from '../lib/error-handling';
 import {getDefaultNamespace, NamespaceSelect, validateNamespace} from '../lib/namespace';
 import {DeleteModalDialog} from "../lib/modals";
 import mailtrainConfig from 'mailtrainConfig';
-import {getTagLanguages, getTemplateTypes, getTypeForm, ResourceType} from '../templates/helpers';
+import {getModals, getTagLanguages, getTemplateTypes, getTypeForm, ResourceType} from '../templates/helpers';
 import axios from '../lib/axios';
 import styles from "../lib/styles.scss";
 import campaignsStyles from "./styles.scss";
@@ -327,7 +327,7 @@ export default class CUD extends Component {
                 data.source = channel.source;
 
                 if (channel.source === CampaignSource.CUSTOM_FROM_TEMPLATE) {
-                    data.data_sourceTemplate = channel.sourceTemplate;
+                    data.data_sourceTemplate = channel.data.sourceTemplate;
 
                 } else if (channel.source === CampaignSource.CUSTOM_FROM_CAMPAIGN) {
                     data.data_sourceCampaign = channel.data.sourceCampaign;
@@ -437,7 +437,7 @@ export default class CUD extends Component {
         }
 
         if (!state.getIn(['subject', 'value'])) {
-            state.setIn(['subject', 'error'], t('"Subject" line must not be empty"'));
+            state.setIn(['subject', 'error'], t('subjectLineMustNotBeEmpty'));
         }
 
         if (!state.getIn(['send_configuration', 'value'])) {
@@ -639,6 +639,7 @@ export default class CUD extends Component {
             sourceEdit = <Dropdown id="source" label={t('contentSource')} options={this.sourceOptions}/>
         }
 
+        let templateModals = null;
         let templateEdit = null;
         if (sourceTypeKey === CampaignSource.TEMPLATE || (!isEdit && sourceTypeKey === CampaignSource.CUSTOM_FROM_TEMPLATE)) {
             const templatesColumns = [
@@ -676,6 +677,7 @@ export default class CUD extends Component {
             let customTemplateTypeForm = null;
 
             if (customTemplateTypeKey) {
+                templateModals = getModals(this, customTemplateTypeKey, isEdit);
                 customTemplateTypeForm = getTypeForm(this, customTemplateTypeKey, isEdit);
             }
 
@@ -702,12 +704,13 @@ export default class CUD extends Component {
                         deletingMsg={t('deletingCampaign')}
                         deletedMsg={t('campaignDeleted')}/>
                 }
+                {templateModals}
 
                 <Title>{isEdit ? this.editTitles[this.getFormValue('type')] : this.createTitles[this.getFormValue('type')]}</Title>
 
                 {!canModify &&
                 <div className="alert alert-warning" role="alert">
-                    <Trans><b>Warning!</b> You do not have necessary permissions to edit this campaign. Any changes that you perform here will be lost.</Trans>
+                    <Trans i18nKey="warning!YouDoNotHaveNecessaryPermissions"><b>Warning!</b> You do not have necessary permissions to edit this campaign. Any changes that you perform here will be lost.</Trans>
                 </div>
                 }
 
@@ -729,7 +732,7 @@ export default class CUD extends Component {
                     <TextArea id="description" label={t('description')}/>
 
                     {mailtrainConfig.channelsEnabled &&
-                        <TableSelect id="channel" label={t('Channel')} withHeader withClear dropdown
+                        <TableSelect id="channel" label={t('channel')} withHeader withClear dropdown
                                      dataUrl='rest/channels-with-create-campaign-permission-table'
                                      columns={channelsColumns} selectionLabelIndex={1}/>
                     }
@@ -746,7 +749,7 @@ export default class CUD extends Component {
 
                     <Fieldset label={t('sendSettings')}>
 
-                        <TableSelect id="send_configuration" label={t('sendConfiguration')} withHeader dropdown dataUrl='rest/send-configurations-table' columns={sendConfigurationsColumns} selectionLabelIndex={1} />
+                        <TableSelect id="send_configuration" label={t('sendConfiguration-1')} withHeader dropdown dataUrl='rest/send-configurations-table' columns={sendConfigurationsColumns} selectionLabelIndex={1} />
 
                         {sendSettings}
 

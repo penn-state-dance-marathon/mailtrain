@@ -86,24 +86,50 @@ export default class API extends Component {
                     </div>
                 </div>
 
-                <div className="card mb-3">
-                    <div className="card-header">
-                        <b>POST /api/subscribe/:listId – {t('addSubscription')}</b>
-                    </div>
-                    <div className="card-body">
-                        <p className="card-text">
-                            {t('thisApiCallEitherInsertsANewSubscription')}
-                        </p>
-                    </div>
-                </div>
-                <h4>POST /api/subscribe/:listId – {t('addSubscription')}</h4>
+<div class="accordion" id="apicalls">
+    <div class="card">
+        <div class="card-header">
+          <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#moresubscribers"><h4>GET /api/subscriptions/:listCid – {t('getSubscribers')}</h4></button>
+        </div>
+        <div id="moresubscribers" class="collapse" data-parent="#apicalls">
+            <div class="card-body">
+               <p>
+                    {t('getSubscribers')}
+                </p>
 
+                <p>
+                    {t('queryParams')}
+                </p>
+                <ul>
+                    <li><strong>access_token</strong> – {t('yourPersonalAccessToken')}
+                        <ul>
+                        <li><strong>start</strong> – {t('startPosition')} (<em>{t('optionalDefault0')}</em>)</li>
+                        <li><strong>limit</strong> – {t('limitEmailsCountInResponse')} (<em>{t('optionalDefault10000')}</em>)</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <p>
+                    <strong>{t('example')}</strong>
+                </p>
+
+                <pre>curl -XGET '{getUrl(`api/subscriptions/P5wKkz-e7?access_token=${accessToken}&limit=10&start=10&search=gmail`)}' </pre>
+
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+          <h4><button type="button" class="btn btn-link" data-toggle="collapse" data-target="#moresubscribe"><h4>POST /api/subscribe/:listCid – {t('addSubscription')}</h4></button></h4>
+        </div>
+        <div id="moresubscribe" class="collapse" data-parent="#apicalls">
+            <div class="card-body">
                 <p>
                     {t('thisApiCallEitherInsertsANewSubscription')}
                 </p>
 
                 <p>
-                    {t('Query params')}
+                    {t('queryParams')}
                 </p>
                 <ul>
                     <li><strong>access_token</strong> – {t('yourPersonalAccessToken')}</li>
@@ -141,14 +167,26 @@ export default class API extends Component {
                 <pre>curl -XPOST '{getUrl(`api/subscribe/B16uVTdW?access_token=${accessToken}`)}' \<br/>
 --data 'EMAIL=test@example.com&amp;MERGE_CHECKBOX=yes&amp;REQUIRE_CONFIRMATION=yes'</pre>
 
-                <h4>POST /api/unsubscribe/:listId – {t('removeSubscription')}</h4>
+                <p>
+                    {t('responseExample')}:
+                </p>
+                <pre>"data": ("id":"TTrw41znK")</pre>
 
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+          <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#moreunsubscribe"><h4>POST /api/unsubscribe/:listCId – {t('removeSubscription')}</h4></button>
+        </div>
+        <div id="moreunsubscribe" class="collapse" data-parent="#apicalls">
+            <div class="card-body">
                 <p>
                     {t('thisApiCallMarksASubscriptionAs')}
                 </p>
 
                 <p>
-                    {t('Query params')}
+                    {t('queryParams')}
                 </p>
                 <ul>
                     <li><strong>access_token</strong> – {t('yourPersonalAccessToken')}</li>
@@ -168,14 +206,26 @@ export default class API extends Component {
                 <pre>curl -XPOST '{getUrl(`api/unsubscribe/B16uVTdW?access_token=${accessToken}`)}' \<br/>
 --data 'EMAIL=test@example.com'</pre>
 
-                <h4>POST /api/delete/:listId – {t('deleteSubscription')}</h4>
+                <p>
+                    {t('responseExample')}:
+                </p>
+                <pre>"data": ("id":"TTrw41znK", "unsubscribed":true)</pre>
 
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+          <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#moredelete"><h4>POST /api/delete/:listCId – {t('deleteSubscription')}</h4></button>
+        </div>
+        <div id="moredelete" class="collapse" data-parent="#apicalls">
+            <div class="card-body">
                 <p>
                     {t('thisApiCallDeletesASubscription')}
                 </p>
 
                 <p>
-                    {t('Query params')}
+                    {t('queryParams')}
                 </p>
                 <ul>
                     <li><strong>access_token</strong> – {t('yourPersonalAccessToken')}</li>
@@ -194,15 +244,26 @@ export default class API extends Component {
 
                 <pre>curl -XPOST '{getUrl(`api/delete/B16uVTdW?access_token=${accessToken}`)}' \<br/>
 --data 'EMAIL=test@example.com'</pre>
+                <p>
+                    {t('responseExample')}:
+                </p>
+                <pre>"data": ("id":"TTrw41znK", "deleted":true)</pre>
 
-                <h4>POST /api/field/:listId – {t('addNewCustomField')}</h4>
-
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+          <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#morefield"><h4>POST /api/field/:listId – {t('addNewCustomField')}</h4></button>
+        </div>
+        <div id="morefield" class="collapse" data-parent="#apicalls">
+            <div class="card-body">
                 <p>
                     {t('thisApiCallCreatesANewCustomFieldForA')}
                 </p>
 
                 <p>
-                    {t('Query params')}
+                    {t('queryParams')}
                 </p>
                 <ul>
                     <li><strong>access_token</strong> – {t('yourPersonalAccessToken')}</li>
@@ -241,16 +302,26 @@ export default class API extends Component {
                 </p>
 
                 <pre>curl -XPOST '{getUrl(`api/field/B16uVTdW?access_token=${accessToken}`)}' \<br/>
---data 'NAME=Birthday&amp;TYPE=birthday-us&amp;VISIBLE=yes'</pre>
-
-                <h4>GET /api/blacklist/get – {t('getListOfBlacklistedEmails')}</h4>
-
+--data 'NAME=Comment&TYPE=text'</pre>
                 <p>
+                    {t('responseExample')}:
+                </p>
+                <pre>"data": ("id":22, "tag":"MERGE_COMMENT")</pre>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+          <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#moreblacklistget"><h4>GET /api/blacklist/get – {t('getListOfBlacklistedEmails')}</h4></button>
+        </div>
+        <div id="moreblacklistget" class="collapse" data-parent="#apicalls">
+            <div class="card-body">
+               <p>
                     {t('thisApiCallGetListOfBlacklistedEmails')}
                 </p>
 
                 <p>
-                    {t('Query params')}
+                    {t('queryParams')}
                 </p>
                 <ul>
                     <li><strong>access_token</strong> – {t('yourPersonalAccessToken')}
@@ -268,14 +339,21 @@ export default class API extends Component {
 
                 <pre>curl -XGET '{getUrl(`api/blacklist/get?access_token=${accessToken}&limit=10&start=10&search=gmail`)}' </pre>
 
-                <h4>POST /api/blacklist/add – {t('addEmailToBlacklist')}</h4>
-
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+          <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#moreblacklistadd"><h4>POST /api/blacklist/add – {t('addEmailToBlacklist')}</h4></button>
+        </div>
+        <div id="moreblacklistadd" class="collapse" data-parent="#apicalls">
+            <div class="card-body">
                 <p>
                     {t('thisApiCallEitherAddEmailsToBlacklist')}
                 </p>
 
                 <p>
-                    {t('Query params')}
+                    {t('queryParams')}
                 </p>
                 <ul>
                     <li><strong>access_token</strong> – {t('yourPersonalAccessToken')}</li>
@@ -294,15 +372,21 @@ export default class API extends Component {
 
                 <pre>curl -XPOST '{getUrl(`api/blacklist/add?access_token=${accessToken}`)}' \<br/>
 --data 'EMAIL=test@example.com'</pre>
-
-                <h4>POST /api/blacklist/delete – {t('deleteEmailFromBlacklist')}</h4>
-
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+          <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#moreblacklistdelete"><h4>POST /api/blacklist/delete – {t('deleteEmailFromBlacklist')}</h4></button>
+        </div>
+        <div id="moreblacklistdelete" class="collapse" data-parent="#apicalls">
+            <div class="card-body">
                 <p>
                     {t('thisApiCallEitherDeleteEmailsFrom')}
                 </p>
 
                 <p>
-                    {t('Query params')}
+                    {t('queryParams')}
                 </p>
                 <ul>
                     <li><strong>access_token</strong> – {t('yourPersonalAccessToken')}</li>
@@ -321,15 +405,21 @@ export default class API extends Component {
 
                 <pre>curl -XPOST '{getUrl(`api/blacklist/delete?access_token=${accessToken}`)}' \<br/>
 --data 'EMAIL=test@example.com'</pre>
-
-                <h4>GET /api/lists/:email – {t('getTheListsAUserHasSubscribedTo')}</h4>
-
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+          <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#morelistsemail"><h4>GET /api/lists/:email – {t('getTheListsAUserHasSubscribedTo')}</h4></button>
+        </div>
+        <div id="morelistsemail" class="collapse" data-parent="#apicalls">
+            <div class="card-body">
                 <p>
                     {t('retrieveTheListsThatTheUserWithEmailHas')}
                 </p>
 
                 <p>
-                    {t('Query params')}
+                    {t('queryParams')}
                 </p>
                 <ul>
                     <li><strong>access_token</strong> – {t('yourPersonalAccessToken')}</li>
@@ -340,7 +430,82 @@ export default class API extends Component {
                 </p>
 
                 <pre>curl -XGET '{getUrl(`api/lists/test@example.com?access_token=${accessToken}`)}'</pre>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+          <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#morelistsnamespace"><h4>GET /api/lists-by-namespace/:namespaceId – {t('getTheListsInANamespace')}</h4></button>
+        </div>
+        <div id="morelistsnamespace" class="collapse" data-parent="#apicalls">
+            <div class="card-body">
+                <p>
+                  {t('retrieveTheListsThatTheNamespaceWith')}
+                </p>
 
+                <p>
+                  {t('queryParams')}
+                </p>
+                <ul>
+                  <li><strong>access_token</strong> – {t('yourPersonalAccessToken')}</li>
+                </ul>
+
+                <p>
+                  <strong>{t('example')}</strong>
+                </p>
+
+                <pre>curl -XGET '{getUrl(`api/lists-by-namespace/1?access_token=${accessToken}`)}'</pre>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+          <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#morecreatelist"><h4>POST /api/list – {t('createList')}</h4></button>
+        </div>
+        <div id="morecreatelist" class="collapse" data-parent="#apicalls">
+            <div class="card-body">
+                <p>
+                  {t('createsANewListOfSubscribers')}
+                </p>
+
+                <p>
+                  {t('queryParams')}
+                </p>
+                <ul>
+                  <li><strong>access_token</strong> – {t('yourPersonalAccessToken')}</li>
+                </ul>
+
+                <p>
+                  <strong>POST</strong> {t('arguments')}
+                </p>
+                <ul>
+                  <li><strong>NAMESPACE</strong> – {t('namespace')} (<em>{t('required')}</em>)</li>
+                  <li><strong>UNSUBSCRIPTION_MODE</strong> – {t('unsubscription')} (<em>{t('required')}</em>):
+                    <ul>
+                      <li><strong>0</strong> - {t('onestepIeNoEmailWithConfirmationLink')}</li>
+                      <li><strong>1</strong> - {t('onestepWithUnsubscriptionFormIeNoEmail')}</li>
+                      <li><strong>2</strong> - {t('twostepIeAnEmailWithConfirmationLinkWill')}</li>
+                      <li><strong>3</strong> - {t('twostepWithUnsubscriptionFormIeAnEmail')}</li>
+                      <li><strong>4</strong> - {t('manualIeUnsubscriptionHasToBePerformedBy')}</li>
+                    </ul>
+                  </li>
+                  <li><strong>NAME</strong> – {t('name')}</li>
+                  <li><strong>DESCRIPTION</strong> – {t('description')}</li>
+                  <li><strong>HOMEPAGE</strong> – {t('homepage')}</li>
+                  <li><strong>CONTACT_EMAIL</strong> – {t('contactEmail')}</li>
+                  <li><strong>DEFAULT_FORM</strong> – {t('webAndEmailFormsAndTemplatesUsedIn')}</li>
+                  <li><strong>FIELDWIZARD</strong> – {t('representationOfSubscribersName')}:
+                    <ul>
+                      <li><strong>none</strong> - {t('emptyCustomNoFields')}</li>
+                      <li><strong>full_name</strong> - {t('nameOneField')}</li>
+                      <li><strong>first_last_name</strong> - {t('firstNameAndLastNameTwoFields')}</li>
+                    </ul>
+                  </li>
+                  <li><strong>TO_NAME</strong> – {t('recipientsNameTemplate')}</li>
+                  <li><strong>LISTUNSUBSCRIBE_DISABLED</strong> – {t('doNotSendListUnsubscribeHeaders')}</li>
+                  <li><strong>PUBLIC_SUBSCRIBE</strong> – {t('allowPublicUsersToSubscribeThemselves')}</li>
+                  <li><strong>SEND_CONFIGURATION</strong> – {t('sendConfiguration')}</li>
+                </ul>
 
                 <h4>GET /api/lists-by-namespace/:namespaceId – {t('getListsInNamespace')}</h4>
 
@@ -446,13 +611,70 @@ export default class API extends Component {
 
 
                 <h4>GET /api/rss/fetch/:campaignCid – {t('triggerFetchOfACampaign')}</h4>
+                <p>
+                  <strong>{t('example')}</strong>
+                </p>
 
+                <pre>curl -XPOST '{getUrl(`api/list?access_token=${accessToken}`)}' \<br/>
+                  -d 'NAMESPACE=1' \<br/>
+                  -d 'UNSUBSCRIPTION_MODE=0' \<br/>
+                  -d 'NAME=list1' \<br/>
+                  -d 'DESCRIPTION=a very nice list' \<br/>
+                  -d 'CONTACT_EMAIL=test@example.com' \<br/>
+                  -d 'HOMEPAGE=example.com' \<br/>
+                  -d 'FIELDWIZARD=first_last_name' \<br/>
+                  -d 'SEND_CONFIGURATION=1' \<br/>
+                  -d 'PUBLIC_SUBSCRIBE=1' \<br/>
+                  -d 'LISTUNSUBSCRIBE_DISABLED=0'
+                </pre>
+                <p>
+                    {t('responseExample')}:
+                </p>
+                <pre>"data": ("id":"WSGjaP1fY")</pre>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+          <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#moredeletelist"><h4>DELETE /api/list/:listCId – {t('deleteList')}</h4></button>
+        </div>
+        <div id="moredeletelist" class="collapse" data-parent="#apicalls">
+            <div class="card-body">
+                <p>
+                  {t('deletesAListOfSubscribers')}
+                </p>
+
+                <p>
+                  {t('queryParams')}
+                </p>
+                <ul>
+                  <li><strong>access_token</strong> – {t('yourPersonalAccessToken')}</li>
+                </ul>
+
+                <p>
+                  <strong>{t('example')}</strong>
+                </p>
+
+                <pre>curl -XDELETE '{getUrl(`api/list/WSGjaP1fY?access_token=${accessToken}`)}'</pre>
+                <p>
+                    {t('responseExample')}:
+                </p>
+                <pre>{t('emptyObject')}</pre>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+          <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#morerss"><h4>GET /api/rss/fetch/:campaignCid – {t('triggerFetchOfACampaign')}</h4></button>
+        </div>
+        <div id="morerss" class="collapse" data-parent="#apicalls">
+            <div class="card-body">
                 <p>
                     {t('forcesTheRssFeedCheckToImmediatelyCheck')}
                 </p>
 
                 <p>
-                    {t('Query params')}
+                    {t('queryParams')}
                 </p>
                 <ul>
                     <li><strong>access_token</strong> – {t('yourPersonalAccessToken')}</li>
@@ -463,15 +685,21 @@ export default class API extends Component {
                 </p>
 
                 <pre>curl -XGET '{getUrl(`api/rss/fetch/5OOnZKrp0?access_token=${accessToken}`)}'</pre>
-
-                <h4>POST /api/templates/:templateId/send – {t('sendTransactionalEmail')}</h4>
-
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+          <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#moretemplate"><h4>POST /api/templates/:templateId/send – {t('sendTransactionalEmail')}</h4></button>
+        </div>
+        <div id="moretemplate" class="collapse" data-parent="#apicalls">
+            <div class="card-body">
                 <p>
                     {t('sendSingleEmailByTemplateWithGiven')}
                 </p>
 
                 <p>
-                    {t('Query params')}
+                    {t('queryParams')}
                 </p>
                 <ul>
                     <li><strong>access_token</strong> – {t('yourPersonalAccessToken')}</li>
@@ -484,8 +712,8 @@ export default class API extends Component {
                     <li><strong>EMAIL</strong> – {t('emailAddress')} (<em>{t('required')}</em>)</li>
                     <li><strong>SEND_CONFIGURATION_ID</strong> – {t('idOfConfigurationUsedToCreateMailer')}</li>
                     <li><strong>SUBJECT</strong> – {t('subject')}</li>
-                    <li><strong>TAGS</strong> – {t('mapOfTemplatesubjectVariablesToReplace')}</li>
-                    <li><strong>ATTACHMENTS</strong> – {t('Attachments (format as consumed by nodemailer)')}</li>
+                    <li><strong>TAGS</strong> – {t('mapOfTemplateVariablesToReplace')}</li>
+                    <li><strong>ATTACHMENTS</strong> – {t('attachmentsFormatAsConsumedByNodemailer')}</li>
                 </ul>
 
                 <p>
@@ -494,6 +722,13 @@ export default class API extends Component {
 
                 <pre>curl -XPOST '{getUrl(`api/templates/1/send?access_token=${accessToken}`)}' \<br/>
 --data 'EMAIL=test@example.com&amp;SUBJECT=Test&amp;TAGS[FOO]=bar&amp;TAGS[TEST]=example'</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
             </div>
         );
     }

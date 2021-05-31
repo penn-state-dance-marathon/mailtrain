@@ -24,7 +24,7 @@ import {withErrorHandling} from '../lib/error-handling';
 import {getDefaultNamespace, NamespaceSelect, validateNamespace} from '../lib/namespace';
 import {ContentModalDialog, DeleteModalDialog} from "../lib/modals";
 import mailtrainConfig from 'mailtrainConfig';
-import {getEditForm, getTagLanguages, getTemplateTypes, getTypeForm} from './helpers';
+import {getEditForm, getModals, getTagLanguages, getTemplateTypes, getTypeForm} from './helpers';
 import axios from '../lib/axios';
 import styles from "../lib/styles.scss";
 import {getUrl} from "../lib/urls";
@@ -314,8 +314,10 @@ export default class CUD extends Component {
             editForm = getEditForm(this, typeKey);
         }
 
+        let modals = null;
         let typeForm = null;
         if (typeKey) {
+            modals = getModals(this, typeKey, isEdit);
             typeForm = getTypeForm(this, typeKey, isEdit);
         }
 
@@ -356,12 +358,13 @@ export default class CUD extends Component {
                         deletingMsg={t('deletingTemplate')}
                         deletedMsg={t('templateDeleted')}/>
                 }
+                {modals}
 
                 <Title>{isEdit ? t('editTemplate') : t('createTemplate')}</Title>
 
                 {!canModify &&
                     <div className="alert alert-warning" role="alert">
-                        <Trans><b>Warning!</b> You do not have necessary permissions to edit this template. Any changes that you perform here will be lost.</Trans>
+                        <Trans i18nKey="warning!YouDoNotHaveNecessaryPermissions-2"><b>Warning!</b> You do not have necessary permissions to edit this template. Any changes that you perform here will be lost.</Trans>
                     </div>
                 }
 
@@ -374,7 +377,7 @@ export default class CUD extends Component {
                     }
 
                     {this.getFormValue('fromExistingEntity') ?
-                        <TableSelect id="existingEntity" label={t('Source template')} withHeader dropdown dataUrl='rest/templates-table' columns={templatesColumns} selectionLabelIndex={1} />
+                        <TableSelect id="existingEntity" label={t('sourceTemplate')} withHeader dropdown dataUrl='rest/templates-table' columns={templatesColumns} selectionLabelIndex={1} />
                     :
                         <>
                             {isEdit ?

@@ -38,7 +38,7 @@ export default class List extends Component {
     static propTypes = {
         permissions: PropTypes.object,
         channel: PropTypes.object
-    };
+    }
 
     render() {
         const t = this.props.t;
@@ -66,7 +66,7 @@ export default class List extends Component {
         columns.push({ data: 4, title: t('type'), render: data => this.campaignTypeLabels[data] });
 
         if (!channel && mailtrainConfig.channelsEnabled) {
-            columns.push({ data: 5, title: t('Channel') });
+            columns.push({ data: 5, title: t('channel') });
         }
 
         columns.push({
@@ -74,7 +74,7 @@ export default class List extends Component {
             title: t('status'),
             render: (data, display, rowData) => {
                 if (data === CampaignStatus.SCHEDULED) {
-                    const scheduled = rowData[6];
+                    const scheduled = rowData[7];
                     if (scheduled && new Date(scheduled) > new Date()) {
                         return t('sendingScheduled');
                     } else {
@@ -161,11 +161,16 @@ export default class List extends Component {
 
         if (createPermitted) {
             if (channel) {
-                createButton = <LinkButton to={`/channels/${channel.id}/create`} className="btn-primary" icon="plus" label={t('createCampaign')}/>;
+                createButton = (
+                    <>
+                        <LinkButton to={`/channels/${channel.id}/clone`} className="btn-primary" icon="clone" label={t('cloneCampaign')}/>
+                        <LinkButton to={`/channels/${channel.id}/create`} className="btn-primary" icon="plus" label={t('createCampaign')}/>
+                    </>
+                );
             } else {
                 createButton = (
                     <>
-                        <LinkButton to={`/campaigns/clone`} className="btn-primary" icon="clone" label={t('Clone Campaign')}/>
+                        <LinkButton to={`/campaigns/clone`} className="btn-primary" icon="clone" label={t('cloneCampaign')}/>
                         <ButtonDropdown buttonClassName="btn-primary" menuClassName="dropdown-menu-right" icon="plus" label={t('createCampaign')}>
                             <DropdownLink to="/campaigns/create-regular">{t('regular')}</DropdownLink>
                             <DropdownLink to="/campaigns/create-rss">{t('rss')}</DropdownLink>
