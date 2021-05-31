@@ -46,7 +46,6 @@ POOL_NAME=${POOL_NAME:-$(hostname)}
 LOG_LEVEL=${LOG_LEVEL:-'info'}
 
 SENDER_PROCESSES=${SENDER_PROCESSES:-'5'}
-LOG_LEVEL=${LOG_LEVEL:-'info'}
 MAX_POST_SIZE=${MAX_POST_SIZE:-'2MB'}
 WITH_REPORTS=${WITH_REPORTS:-'true'}
 WITH_CHANNELS=${WITH_CHANNELS:-'true'}
@@ -154,8 +153,6 @@ queue:
     # Transactional emails sent via API (i.e. /templates/:templateId/send)
     apiTransactional: $RETENTION_API  # 60 minutes
 
-log:
-  level: $LOG_LEVEL
 EOT
 
     # Manage LDAP if enabled
