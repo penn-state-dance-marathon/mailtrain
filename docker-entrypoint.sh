@@ -32,18 +32,26 @@ LDAP_UIDTAG=${LDAP_UIDTAG:-'username'}
 LDAP_MAILTAG=${LDAP_MAILTAG:-'mail'}
 LDAP_NAMETAG=${LDAP_NAMETAG:-'username'}
 LDAP_METHOD=${LDAP_METHOD:-'ldapjs'}
+WITH_CAS=${WITH_CAS:-'false'}
+CAS_URL=${CAS_URL:-'https://example.cas-server.com'}
+CAS_NAMETAG=${CAS_NAMETAG:-'username'}
+CAS_MAILTAG=${CAS_MAILTAG:-'mail'}
+CAS_NEWUSERROLE=${CAS_NEWUSERROLE:-'nobody'}
+CAS_NEWUSERNAMESPACEID=${CAS_NEWUSERNAMESPACEID:-'1'}
 MONGO_HOST=${MONGO_HOST:-'mongo'}
 WITH_REDIS=${WITH_REDIS:-'true'}
 REDIS_HOST=${REDIS_HOST:-'redis'}
+REDIS_PORT=${REDIS_PORT:-'6379'}
 MYSQL_HOST=${MYSQL_HOST:-'mysql'}
+MYSQL_PORT=${MYSQL_PORT:-'3306'}
 MYSQL_DATABASE=${MYSQL_DATABASE:-'mailtrain'}
 MYSQL_USER=${MYSQL_USER:-'mailtrain'}
 MYSQL_PASSWORD=${MYSQL_PASSWORD:-'mailtrain'}
 WITH_ZONE_MTA=${WITH_ZONE_MTA:-'true'}
 POOL_NAME=${POOL_NAME:-$(hostname)}
+LOG_LEVEL=${LOG_LEVEL:-'info'}
 
 SENDER_PROCESSES=${SENDER_PROCESSES:-'5'}
-LOG_LEVEL=${LOG_LEVEL:-'info'}
 MAX_POST_SIZE=${MAX_POST_SIZE:-'2MB'}
 WITH_REPORTS=${WITH_REPORTS:-'true'}
 WITH_CHANNELS=${WITH_CHANNELS:-'true'}
@@ -100,6 +108,7 @@ mysql:
   database: $MYSQL_DATABASE
   user: $MYSQL_USER
   password: $MYSQL_PASSWORD
+  port: $MYSQL_PORT
 
 editors:
 - mosaico
@@ -124,6 +133,7 @@ channels:
 redis:
   enabled: $WITH_REDIS
   host: $REDIS_HOST
+  port: $REDIS_PORT
 
 builtinZoneMTA:
   enabled: $WITH_ZONE_MTA
@@ -148,6 +158,7 @@ queue:
     subscription: $RETENTION_SUBSCRIPTION  # 5 minutes
     # Transactional emails sent via API (i.e. /templates/:templateId/send)
     apiTransactional: $RETENTION_API  # 60 minutes
+
 EOT
 
 # Manage keycloak if enabled
@@ -196,6 +207,27 @@ ldap:
 EOT
     fi
 
+    # Manage CAS if enabled
+    if [ "$WITH_CAS" = "true" ]; then
+        echo 'Info: CAS enabled'
+    cat >> server/config/production.yaml <<EOT
+cas:
+  enabled: true
+  url: $CAS_URL
+  nameTag: $CAS_NAMETAG
+  mailTag: $CAS_MAILTAG
+  newUserRole: $CAS_NEWUSERROLE
+  newUserNamespaceId: $CAS_NEWUSERNAMESPACEID
+
+EOT
+    else
+        echo 'Info: CAS not enabled'
+    cat >> server/config/production.yaml <<EOT
+cas:
+  enabled: false
+EOT
+    fi
+
 fi
 
 if [ -f server/services/workers/reports/config/production.yaml ]; then
@@ -212,11 +244,11 @@ fi
 
 # Wait for the other services to start
 echo 'Info: Waiting for MySQL Server'
-while ! nc -z $MYSQL_HOST 3306; do sleep 1; done
+while ! nc -z $MYSQL_HOST $MYSQL_PORT; do sleep 1; done
 
 if [ "$WITH_REDIS" = "true" ]; then
   echo 'Info: Waiting for Redis Server'
-  while ! nc -z $REDIS_HOST 6379; do sleep 1; done
+  while ! nc -z $REDIS_HOST $REDIS_PORT; do sleep 1; done
 fi
 
 if [ "$WITH_ZONE_MTA" = "true" ]; then
@@ -225,4 +257,21 @@ if [ "$WITH_ZONE_MTA" = "true" ]; then
 fi
 
 cd server
+# Install passport-cas2 node package if CAS selected
+if [ "$WITH_CAS" = "true" ]; then
+  echo 'Info: Installing passport-cas2'
+  NODE_ENV=production npm install passport-cas2
+fi
+
+if [ "$WITH_LDAP" = "true" ]; then
+  if [ "$LDAP_METHOD" = "ldapjs" ]; then
+    echo 'Info: Install passport-ldapjs'
+    npm install passport-ldapjs
+  fi
+  if [ "$LDAP_METHOD" = "ldapauth" ]; then
+    echo 'Info: Install passport-ldapauth'
+    npm install passport-ldapauth
+  fi
+fi
+
 NODE_ENV=production node index.js

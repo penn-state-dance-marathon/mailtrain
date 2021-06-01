@@ -18,6 +18,8 @@ const slugify = require('slugify');
 const passport = require('../lib/passport');
 const templates = require('../models/templates');
 const campaigns = require('../models/campaigns');
+const urls = require('../lib/urls')
+const { getMergeTagsForBases } = require('../../shared/templates')
 const {castToInteger} = require('../lib/helpers');
 const {getSystemSendConfigurationId} = require('../../shared/send-configurations');
 
@@ -110,7 +112,7 @@ router.postAsync('/unsubscribe/:listCid', passport.loggedIn, async (req, res) =>
     res.status(200);
     res.json({
         data: {
-            id: subscription.id,
+            id: subscription.cid,
             unsubscribed: true
         }
     });
@@ -133,7 +135,7 @@ router.postAsync('/delete/:listCid', passport.loggedIn, async (req, res) => {
     res.status(200);
     res.json({
         data: {
-            id: subscription.id,
+            id: subscription.cid,
             deleted: true
         }
     });
@@ -227,7 +229,7 @@ router.postAsync('/field/:listCid', passport.loggedIn, async (req, res) => {
         input[(key || '').toString().trim().toUpperCase()] = (req.body[key] || '').toString().trim();
     });
 
-    const key = (input.NAME || '').toString().trim() || slugify('merge ' + name, '_').toUpperCase();
+    const key = slugify('merge ' + input.NAME, '_').toUpperCase();
     const visible = ['false', 'no', '0', ''].indexOf((input.VISIBLE || '').toString().toLowerCase().trim()) < 0;
 
     const groupTemplate = (input.GROUP_TEMPLATE || '').toString().toLowerCase().trim();
@@ -362,7 +364,9 @@ router.postAsync('/templates/:templateId/send', async (req, res) => {
     }
 
     const emails = input.EMAIL.split(',');
-    const mergeTags = input.TAGS || {};
+    const mergeTagsGlobal = getMergeTagsForBases(urls.getTrustedUrl(), urls.getSandboxUrl(), urls.getPublicUrl());
+    const mergeTagsLocal = input.TAGS || {};
+    const mergeTags = { ...mergeTagsGlobal, ...mergeTagsLocal}
     const subject = input.SUBJECT || '';
     const attachments = input.ATTACHMENTS || [];
 

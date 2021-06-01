@@ -25,7 +25,7 @@ import {withAsyncErrorHandler, withErrorHandling} from '../lib/error-handling';
 import {getDefaultNamespace, NamespaceSelect, validateNamespace} from '../lib/namespace';
 import {DeleteModalDialog} from "../lib/modals";
 import mailtrainConfig from 'mailtrainConfig';
-import {getTagLanguages, getTemplateTypes, getTypeForm, ResourceType} from '../templates/helpers';
+import {getModals, getTagLanguages, getTemplateTypes, getTypeForm, ResourceType} from '../templates/helpers';
 import axios from '../lib/axios';
 import styles from "../lib/styles.scss";
 import campaignsStyles from "./styles.scss";
@@ -368,17 +368,17 @@ export default class CUD extends Component {
         if (submitResult) {
             if (this.props.entity) {
                 if (submitAndLeave) {
-                    this.navigateToWithFlashMessage('/channels', 'success', t('Channel updated'));
+                    this.navigateToWithFlashMessage('/channels', 'success', t('channelUpdated'));
                 } else {
                     await this.getFormValuesFromURL(`rest/channels/${this.props.entity.id}`);
                     this.enableForm();
-                    this.setFormStatusMessage('success', t('Channel updated'));
+                    this.setFormStatusMessage('success', t('channelUpdated'));
                 }
             } else {
                 if (submitAndLeave) {
-                    this.navigateToWithFlashMessage('/channels', 'success', t('Channel created'));
+                    this.navigateToWithFlashMessage('/channels', 'success', t('channelCreated'));
                 } else {
-                    this.navigateToWithFlashMessage(`/channels/${submitResult}/edit`, 'success', t('Channel created'));
+                    this.navigateToWithFlashMessage(`/channels/${submitResult}/edit`, 'success', t('channelCreated'));
                 }
             }
         } else {
@@ -441,6 +441,7 @@ export default class CUD extends Component {
             sendSettings = null;
         }
 
+        let templateModals = null;
         let templateEdit = null;
         if (sourceTypeKey === CampaignSource.TEMPLATE || (!isEdit && sourceTypeKey === CampaignSource.CUSTOM_FROM_TEMPLATE)) {
             const templatesColumns = [
@@ -478,6 +479,7 @@ export default class CUD extends Component {
             let customTemplateTypeForm = null;
 
             if (customTemplateTypeKey) {
+                templateModals = getModals(this, customTemplateTypeKey, isEdit);
                 customTemplateTypeForm = getTypeForm(this, customTemplateTypeKey, false);
             }
 
@@ -501,15 +503,16 @@ export default class CUD extends Component {
                         deleteUrl={`rest/channels/${this.props.entity.id}`}
                         backUrl={`/channels/${this.props.entity.id}/edit`}
                         successUrl="/channels"
-                        deletingMsg={t('Deleting channel ...')}
-                        deletedMsg={t('Channel deleted')}/>
+                        deletingMsg={t('deletingChannel')}
+                        deletedMsg={t('channelDeleted')}/>
                 }
+                {templateModals}
 
-                <Title>{isEdit ? t('Edit Channel') : t('Create Channel')}</Title>
+                <Title>{isEdit ? t('editChannel') : t('createChannel')}</Title>
 
                 {!canModify &&
                 <div className="alert alert-warning" role="alert">
-                    <Trans><b>Warning!</b> You do not have necessary permissions to edit this channel. Any changes that you perform here will be lost.</Trans>
+                    <Trans i18nKey="warning!YouDoNotHaveNecessaryPermissions-1"><b>Warning!</b> You do not have necessary permissions to edit this channel. Any changes that you perform here will be lost.</Trans>
                 </div>
                 }
 
@@ -533,9 +536,9 @@ export default class CUD extends Component {
                     <NamespaceSelect/>
 
                     <hr/>
-                    <Fieldset label={t('Campaign defaults')}>
-                        <InputField id="cpg_name" label={t('Campaign name')}/>
-                        <TextArea id="cpg_description" label={t('Campaign description')}/>
+                    <Fieldset label={t('campaignDefaults')}>
+                        <InputField id="cpg_name" label={t('campaignName-1')}/>
+                        <TextArea id="cpg_description" label={t('campaignDescription')}/>
                     </Fieldset>
 
                     <hr/>
@@ -546,7 +549,7 @@ export default class CUD extends Component {
 
                     <Fieldset label={t('sendSettings')}>
 
-                        <TableSelect id="send_configuration" label={t('sendConfiguration')} withHeader withClear dropdown dataUrl='rest/send-configurations-table' columns={sendConfigurationsColumns} selectionLabelIndex={1} />
+                        <TableSelect id="send_configuration" label={t('sendConfiguration-1')} withHeader withClear dropdown dataUrl='rest/send-configurations-table' columns={sendConfigurationsColumns} selectionLabelIndex={1} />
 
                         {sendSettings}
 
@@ -573,7 +576,7 @@ export default class CUD extends Component {
                         {canModify &&
                             <>
                                 <Button type="submit" className="btn-primary" icon="check" label={t('save')}/>
-                                {isEdit && <Button type="submit" className="btn-primary" icon="check" label={t('saveAndLeave')} onClickAsync={async () => await this.submitHandler(true)}/>}
+                                <Button type="submit" className="btn-primary" icon="check" label={t('saveAndLeave')} onClickAsync={async () => await this.submitHandler(true)}/>
                             </>
                         }
                         {canDelete && <LinkButton className="btn-danger" icon="trash-alt" label={t('delete')} to={`/channels/${this.props.entity.id}/delete`}/> }
