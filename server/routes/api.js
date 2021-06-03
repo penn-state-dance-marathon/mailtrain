@@ -78,6 +78,8 @@ router.postAsync('/subscribe/:listCid', passport.loggedIn, async (req, res) => {
         });
     } else {
         subscription.email = input.EMAIL;
+        subscription.FIRST_NAME = input.FIRST_NAME;
+        subscription.LAST_NAME = input.LAST_NAME;
 
         const meta = {
             updateAllowed: true,
