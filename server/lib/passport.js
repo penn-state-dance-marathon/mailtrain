@@ -294,13 +294,8 @@ module.exports.keycloakLoginCallback = (req, res, next) => {
                 return next(err);
             }
 
-            if (req.body.remember) {
-                // Cookie expires after 30 days
-                req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
-            } else {
-                // Cookie expires at end of session
-                req.session.cookie.expires = false;
-            }
+            // Cookie expires at end of session
+            req.session.cookie.expires = false;
 
             return res.redirect('/'); // After succeeded login, redirect to the homepage
         });
