@@ -77,8 +77,8 @@ if (config.ldap.enabled) {
 
 if (config.keycloak.enabled) {
     try {
-        KeycloakStrategy = require('@exlinc/keycloak-passport');   // eslint-disable-line global-require
-        KeycloakEnvConfig = require('@exlinc/keycloak-passport/configuration');
+        KeycloakStrategy = require('./keycloak');   // eslint-disable-line global-require
+        KeycloakEnvConfig = require('./keycloak/configuration');
         authMode = 'Keycloak';
         log.info('Keycloak', 'Found module "keycloak-passport". It will be used for Keycloak auth.');
         

@@ -43,7 +43,7 @@
     "posix": "^4.1.2"
   },
   "dependencies": {
-    "@exlinc/keycloak-passport": "^1.0.2",
+    "passport-oauth2": "^1.4.0",
     "aws-sdk": "^2.601.0",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.7.2",
