@@ -41,7 +41,7 @@ export default class Update extends Component {
     }
 
     submitFormValuesMutator(data) {
-        return filterData(data, ['adminEmail', 'uaCode', 'mapsApiKey', 'shoutout', 'pgpPassphrase', 'pgpPrivateKey', 'defaultHomepage']);
+        return filterData(data, ['adminEmail', 'uaCode', 'mapsApiKey', 'shoutout', 'pgpPassphrase', 'pgpPrivateKey', 'defaultHomepage', 'ssoRoleMapping']);
     }
 
     componentDidMount() {
@@ -92,6 +92,12 @@ export default class Update extends Component {
                         <Trans i18nKey="doNotUseSensitiveKeysHereThePrivateKey"><p className="text-warning">Do not use sensitive keys here. The private key and passphrase are not encrypted in the database.</p></Trans>
                         <InputField id="pgpPassphrase" label={t('privateKeyPassphrase')} placeholder={t('passphraseForTheKeyIfSet')} help={t('onlyFillThisIfYourPrivateKeyIsEncrypted')}/>
                         <TextArea id="pgpPrivateKey" label={t('gpgPrivateKey')} placeholder={t('beginsWithBeginPgpPrivateKeyBlock')} help={t('thisValueIsOptionalIfYouDoNotProvideA')}/>
+                    </Fieldset>
+
+                    
+                    <Fieldset label={t('ssoSettings')}>
+                        <p>Configure Keycloak / OpenID Settings.</p>
+                        <TextArea id="ssoRoleMapping" label={t('ssoRoleMapping')} help={t('ssoExample')}/>
                     </Fieldset>
 
                     <hr/>

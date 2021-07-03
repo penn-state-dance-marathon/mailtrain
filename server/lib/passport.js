@@ -350,8 +350,9 @@ if (LdapStrategy) {
     
     passport.use(new KeycloakStrategy(keycloakStrategyOpts, nodeifyFunction(async (accessToken, refreshToken, profile, done) => {
         try {
-            log.info(JSON.stringify(profile));
             const user = await users.getByUsername(profile.username);
+            
+            // If the user already exists, make sure to update their role
             await users.updateWithConsistencyCheck(contextHelpers.getAdminContext(),{
                 originalHash: users.hash(user),
                 id: user.id,
@@ -359,9 +360,10 @@ if (LdapStrategy) {
                 name: profile.fullName || '',
                 email: profile.email || '',
                 namespace: parseInt(config.keycloak.newUserNamespaceId),
-                role: user.role
+                role: 'master'
             }, false);
 
+            console.log(user.role)
             return {
                 id: user.id,
                 username: profile.username,
