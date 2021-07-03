@@ -302,10 +302,8 @@ module.exports.keycloakLoginCallback = (req, res, next) => {
                 req.session.cookie.expires = false;
             }
 
-            return res.json();
+            return res.redirect('/'); // After succeeded login, redirect to the homepage
         });
-
-        res.redirect('/');
     })(req, res, next);
 };
 
@@ -350,7 +348,7 @@ if (LdapStrategy) {
     passport.serializeUser((user, done) => done(null, user));
     passport.deserializeUser((user, done) => done(null, user));
 
-} else if (true) {  // TODO what?
+} else if (config.keycloak.enabled) {
     log.info('Using OIDC auth via Keycloak (keycloak-passport)');
     module.exports.authMethod = 'Keycloak';
     module.exports.isAuthMethodLocal = false;
