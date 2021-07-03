@@ -8,13 +8,9 @@ RUN set -ex; \
 
 # Copy package.json dependencies
 COPY server/package.json /app/server/package.json
-COPY server/package-lock.json /app/server/package-lock.json
 COPY client/package.json /app/client/package.json
-COPY client/package-lock.json /app/client/package-lock.json
 COPY shared/package.json /app/shared/package.json
-COPY shared/package-lock.json /app/shared/package-lock.json
 COPY zone-mta/package.json /app/zone-mta/package.json
-COPY zone-mta/package-lock.json /app/zone-mta/package-lock.json
 
 # Install dependencies in each directory
 RUN cd /app/client && npm install
