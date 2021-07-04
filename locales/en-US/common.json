@@ -1147,5 +1147,7 @@
   "thePasswordMustContainAtLeastOneSpecial": "The password must contain at least one special character",
   "ssoSettings": "Single Sign-On Settings",
   "ssoRoleMapping": "Role Mapping",
-  "ssoExample": "JSON dict with key = Mailtrain role name, value = list of Keycloak roles"
+  "ssoNamespaceMapping": "Namespace Mapping",
+  "ssoExample": "JSON dict with key = Mailtrain role name, value = list of Keycloak roles. Must be in order of most access to least access.",
+  "ssoExample2": "JSON dict with key = Mailtrain namespace name, value = list of Keycloak roles"
 }

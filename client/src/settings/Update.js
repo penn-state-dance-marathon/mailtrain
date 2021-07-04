@@ -41,7 +41,7 @@ export default class Update extends Component {
     }
 
     submitFormValuesMutator(data) {
-        return filterData(data, ['adminEmail', 'uaCode', 'mapsApiKey', 'shoutout', 'pgpPassphrase', 'pgpPrivateKey', 'defaultHomepage', 'ssoRoleMapping']);
+        return filterData(data, ['adminEmail', 'uaCode', 'mapsApiKey', 'shoutout', 'pgpPassphrase', 'pgpPrivateKey', 'defaultHomepage', 'ssoRoleMapping', 'ssoNamespaceMapping']);
     }
 
     componentDidMount() {
@@ -98,6 +98,8 @@ export default class Update extends Component {
                     <Fieldset label={t('ssoSettings')}>
                         <p>Configure Keycloak / OpenID Settings.</p>
                         <TextArea id="ssoRoleMapping" label={t('ssoRoleMapping')} help={t('ssoExample')}/>
+                        <TextArea id="ssoNamespaceMapping" label={t('ssoNamespaceMapping')} help={t('ssoExample2')}/>
+                        <p>Note: If you get a "Namespace deleted" error, check the spelling on the Namespace mapping field.</p>
                     </Fieldset>
 
                     <hr/>

@@ -15,6 +15,7 @@ const namespaces = require('../models/namespaces')
 const { nodeifyFunction, nodeifyPromise } = require('./nodeify');
 const interoperableErrors = require('../../shared/interoperable-errors');
 const contextHelpers = require('./context-helpers');
+const { getMailtrainRoleFromKeycloakRoles, shareNamespacesWithUser } = require('./keycloak/map');
 
 let authMode = 'local';
 
@@ -349,9 +350,12 @@ if (LdapStrategy) {
     module.exports.isAuthMethodLocal = false;
     
     passport.use(new KeycloakStrategy(keycloakStrategyOpts, nodeifyFunction(async (accessToken, refreshToken, profile, done) => {
+        const role = await getMailtrainRoleFromKeycloakRoles(profile.roles);
+        // Give the user no role or namespace by default. Share the namespaces automatically.
+
         try {
             const user = await users.getByUsername(profile.username);
-            
+
             // If the user already exists, make sure to update their role
             await users.updateWithConsistencyCheck(contextHelpers.getAdminContext(),{
                 originalHash: users.hash(user),
@@ -360,16 +364,16 @@ if (LdapStrategy) {
                 name: profile.fullName || '',
                 email: profile.email || '',
                 namespace: parseInt(config.keycloak.newUserNamespaceId),
-                role: 'master'
+                role: role
             }, false);
 
-            console.log(user.role)
+            await shareNamespacesWithUser(user, profile.roles);
             return {
                 id: user.id,
                 username: profile.username,
                 name: profile.fullName || '',
                 email: profile.email || '',
-                role: user.role
+                role: role
             };
 
         } catch (err) {
@@ -378,16 +382,17 @@ if (LdapStrategy) {
                     username: profile.username,
                     name: profile.fullName || '',
                     email: profile.email || '',
-                    role: config.keycloak.newUserRole,
+                    role: role,
                     namespace: config.keycloak.newUserNamespaceId
                 });
 
+                await shareNamespacesWithUser(user, profile.roles);
                 return {
                     id: userId,
                     username: profile.username,
                     name: profile.fullName || '',
                     email: profile.email || '',
-                    role: config.ldap.newUserRole
+                    role: role
                 };
             } else {
                 throw err;
