@@ -2,6 +2,7 @@
 
 const passport = require('../../lib/passport');
 const users = require('../../models/users');
+const config = require('../../lib/config');
 const contextHelpers = require('../../lib/context-helpers');
 
 const router = require('../../lib/router-async').create();
@@ -39,8 +40,14 @@ router.postAsync('/access-token-reset', passport.loggedIn, passport.csrfProtecti
     return res.json(accessToken);
 });
 
+if (config.keycloak.enabled) {
+    router.get('/login', passport.csrfProtection, passport.keycloakLogin);
+    router.get('/login/callback', passport.keycloakLoginCallback);
+}
+else {
+   router.post('/login', passport.csrfProtection, passport.restLogin);
+}
 
-router.post('/login', passport.csrfProtection, passport.restLogin);
 router.post('/logout', passport.csrfProtection, passport.restLogout);
 
 router.postAsync('/password-reset-send', passport.csrfProtection, async (req, res) => {

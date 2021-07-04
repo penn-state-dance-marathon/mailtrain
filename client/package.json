@@ -47,6 +47,7 @@
     "react-ace": "^8.1.0",
     "react-ckeditor-component": "^1.1.0",
     "react-color": "^2.19.3",
+    "react-countdown": "^2.3.2",
     "react-day-picker": "^7.4.10",
     "react-dnd": "^9.5.1",
     "react-dnd-html5-backend": "^9.5.1",
@@ -60,7 +61,8 @@
     "shallowequal": "^1.1.0",
     "shortid": "^2.2.16",
     "slugify": "^1.5.2",
-    "url-parse": "^1.5.1"
+    "url-parse": "^1.5.1",
+    "webpack-dev-server": "^3.11.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.16",

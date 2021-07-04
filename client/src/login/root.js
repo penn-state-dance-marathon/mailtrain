@@ -26,15 +26,19 @@ function getMenus(t) {
         };
     }
 
-    return {
-        'login': {
-            title: t('signIn'),
-            link: '/login',
-            panelComponent: Login,
+    if (!mailtrainConfig.keycloakEnabled) {
+        return {
+            'login': {
+                title: t('signIn'),
+                link: '/login',
+                panelComponent: Login,
 
-            children: subPaths
-        }
-    };
+                children: subPaths
+            }
+        };
+    } else {
+        return {}
+    }
 }
 
 export default {

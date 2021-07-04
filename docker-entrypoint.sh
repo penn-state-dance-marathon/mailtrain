@@ -14,6 +14,12 @@ URL_BASE_PUBLIC=${URL_BASE_PUBLIC:-"http://localhost:${PORT_PUBLIC}"}
 WWW_HOST=${WWW_HOST:-'0.0.0.0'}
 WWW_PROXY=${WWW_PROXY:-'false'}
 WWW_SECRET=${WWW_SECRET:-$(pwgen -1)}
+WITH_KEYCLOAK=${WITH_KEYCLOAK:-'false'}
+KEYCLOAK_HOST=${KEYCLOAK_HOST:-'http://localhost'}
+KEYCLOAK_CLIENTID=${KEYCLOAK_CLIENTID:-'mailtrain'}
+KEYCLOAK_REALM=${KEYCLOAK_REALM:-'mailtrain'}
+KEYCLOAK_CLIENTSECRET=${KEYCLOAK_CLIENTSECRET:-'secret'}
+KEYCLOAK_CALLBACKURL=${KEYCLOAK_CALLBACKURL:-"${URL_BASE_TRUSTED}/rest/login/callback"}
 WITH_LDAP=${WITH_LDAP:-'false'}
 LDAP_HOST=${LDAP_HOST:-'ldap'}
 LDAP_PORT=${LDAP_PORT:-'389'}
@@ -154,6 +160,26 @@ queue:
     apiTransactional: $RETENTION_API  # 60 minutes
 
 EOT
+
+# Manage keycloak if enabled
+    if [ "$WITH_KEYCLOAK" = "true" ]; then
+        echo 'Info: Keycloak enabled'
+    cat >> server/config/production.yaml <<EOT
+keycloak:
+  enabled: true
+  host: $KEYCLOAK_HOST
+  clientId: $KEYCLOAK_CLIENTID
+  realm: $KEYCLOAK_REALM
+  clientSecret: $KEYCLOAK_CLIENTSECRET
+  callbackUrl: $KEYCLOAK_CALLBACKURL
+EOT
+    else
+        echo 'Info: Keycloak not enabled'
+    cat >> server/config/production.yaml <<EOT
+keycloak:
+  enabled: false
+EOT
+    fi
 
     # Manage LDAP if enabled
     if [ "$WITH_LDAP" = "true" ]; then

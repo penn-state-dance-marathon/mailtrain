@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "debug": "node --inspect=0.0.0.0 index.js",
     "sqlinit": "node setup/sql/init.js",
     "sqldump": "node setup/sql/dump.js | sed -e '/^\\/\\*.*\\*\\/;$/d' -e 's/.[0-9]\\{4\\}-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]./NOW()/g' > setup/sql/mailtrain${DUMP_NAME_SUFFIX}.sql",
     "sqldrop": "node setup/sql/drop.js",
@@ -104,6 +105,7 @@
     "passport-ldapauth": "^2.1.4",
     "passport-ldapjs": "^1.0.3",
     "passport-local": "^1.0.0",
+    "passport-oauth2": "^1.4.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
     "serve-favicon": "^2.5.0",

@@ -1,5 +1,5 @@
 'use strict';
-
+const log = require('../lib/log');
 const config = require('../lib/config');
 const knex = require('../lib/knex');
 const hasher = require('node-object-hash')();
@@ -176,7 +176,7 @@ async function create(context, user) {
             id = ids[0];
 
         } else {
-            const filteredUser = filterObject(user, allowedKeysExternal);
+            const filteredUser = filterObject(user, hashKeys);
             enforce(user.role in config.roles.global, 'Unknown role');
 
             await namespaceHelpers.validateEntity(tx, user);
@@ -223,7 +223,7 @@ async function updateWithConsistencyCheck(context, user, isOwnAccount) {
             enforce(user.role in config.roles.global, 'Unknown role');
             await namespaceHelpers.validateEntity(tx, user);
 
-            await tx('users').where('id', user.id).update(filterObject(user, allowedKeysExternal));
+            await tx('users').where('id', user.id).update(filterObject(user, hashKeys));
         }
 
         // Removes the default shares based on the user role and rebuilds permissions.

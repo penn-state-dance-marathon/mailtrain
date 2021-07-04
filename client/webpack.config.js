@@ -13,6 +13,14 @@ module.exports = {
         "grapesjs-root": ['./src/lib/sandboxed-grapesjs-root.js'],
         "codeeditor-root": ['./src/lib/sandboxed-codeeditor-root.js'],
     },
+    devServer: {
+      port: 3000, // use any port suitable for your configuration
+      host: '0.0.0.0', // to accept connections from outside container
+      watchOptions: {
+          aggregateTimeout: 500, // delay before reloading
+          poll: 1000 // enable polling since fsevents are not supported in docker
+      }
+    },
     output: {
         library: 'MailtrainReactBody',
         filename: '[name].js',
@@ -41,6 +49,7 @@ module.exports = {
                             plugins: [
                                 ["@babel/plugin-proposal-decorators", { "legacy": true }],
                                 ["@babel/plugin-proposal-class-properties", { "loose" : true }],
+                                ["@babel/plugin-proposal-private-methods", { "loose" : true }],
                                 "@babel/plugin-proposal-function-bind"
                             ]
                         }

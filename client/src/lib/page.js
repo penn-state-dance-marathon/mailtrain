@@ -1,5 +1,6 @@
 'use strict';
 
+import axios from "./axios";
 import React, {Component} from "react";
 import i18n, {withTranslation} from './i18n';
 import PropTypes from "prop-types";
@@ -451,13 +452,25 @@ export class SectionContent extends Component {
         this.setFlashMessage(severity, text);
     }
 
+    redirectToKeycloakLoginFlow() {
+        window.location = '/rest/login'    
+    }
+
     ensureAuthenticated() {
         if (!mailtrainConfig.isAuthenticated) {
-           if (mailtrainConfig.authMethod == 'cas') {
-              window.location.href=getUrl('cas/login?next=' + encodeURIComponent(window.location.pathname));
-           } else {
-              this.navigateTo('/login?next=' + encodeURIComponent(window.location.pathname));
-           }
+            if (mailtrainConfig.authMethod == 'Keycloak') {
+                try {
+                    this.redirectToKeycloakLoginFlow();
+                } catch(err) {
+                    log.info('Redirect to Keycloak login flow failed!');
+                    this.navigateTo('/login?next=' + encodeURIComponent(window.location.pathname));
+                }
+            }
+            else if (mailtrainConfig.authMethod == 'cas') {
+                window.location.href=getUrl('cas/login?next=' + encodeURIComponent(window.location.pathname));
+            } else {
+                this.navigateTo('/login?next=' + encodeURIComponent(window.location.pathname));
+            }
         }
     }
 
@@ -472,16 +485,26 @@ export class SectionContent extends Component {
     errorHandler(error) {
         if (error instanceof interoperableErrors.NotLoggedInError) {
             if (window.location.pathname !== '/login') { // There may be multiple async requests failing at the same time. So we take the pathname only from the first one.
-                this.navigateTo('/login?next=' + encodeURIComponent(window.location.pathname));
+                // this.navigateTo('/login?next=' + encodeURIComponent(window.location.pathname));
+                if (mailtrainConfig.keycloakEnabled) {
+                    try {
+                        this.redirectToKeycloakLoginFlow();
+                    } catch (err) {
+                        log.info('Redirect to Keycloak login flow failed!');
+                        this.navigateTo('/login?next=' + encodeURIComponent(window.location.pathname));
+                    }
+                } else {
+                    this.navigateTo('/login?next=' + encodeURIComponent(window.location.pathname));
+                }
+            } else if (error.response && error.response.data && error.response.data.message) {
+                console.error(error);
+                this.navigateToWithFlashMessage(this.props.root, 'danger', error.response.data.message);
+            } else {
+                console.error(error);
+                this.navigateToWithFlashMessage(this.props.root, 'danger', error.message);
             }
-        } else if (error.response && error.response.data && error.response.data.message) {
-            console.error(error);
-            this.navigateToWithFlashMessage(this.props.root, 'danger', error.response.data.message);
-        } else {
-            console.error(error);
-            this.navigateToWithFlashMessage(this.props.root, 'danger', error.message);
+            return true;
         }
-        return true;
     }
 
     async closeFlashMessage() {

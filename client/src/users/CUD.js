@@ -246,13 +246,19 @@ export default class CUD extends Component {
                 <Title>{isEdit ? t('editUser') : t('createUser')}</Title>
 
                 <Form stateOwner={this} onSubmitAsync={::this.submitHandler}>
-                    <InputField id="username" label={t('userName')}/>
+                    <InputField id="username" label={t('userName')} disabled={mailtrainConfig.keycloakEnabled}/>
                     {mailtrainConfig.isAuthMethodLocal &&
                         <div>
                             <InputField id="name" label={t('fullName')}/>
                             <InputField id="email" label={t('email')}/>
                             <InputField id="password" label={t('password')} type="password"/>
                             <InputField id="password2" label={t('repeatPassword')} type="password"/>
+                        </div>
+                    }
+                    {mailtrainConfig.keycloakEnabled &&
+                        <div>
+                            <InputField id="name" label={t('fullName')} disabled={true}/>
+                            <InputField id="email" label={t('email')} disabled={true}/>
                         </div>
                     }
                     <TableSelect id="role" label={t('role')} withHeader dropdown dataUrl={'rest/shares-roles-table/global'} columns={rolesColumns} selectionLabelIndex={1}/>

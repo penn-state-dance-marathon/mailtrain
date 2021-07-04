@@ -13,13 +13,9 @@ services:
 
   redis:
     image: redis:5
-    volumes:
-    - redis-data:/data
 
   mongo:
     image: mongo:4-xenial
-    volumes:
-    - mongo-data:/data/db
 
   mailtrain:
     env_file:
@@ -46,8 +42,6 @@ services:
 
 volumes:
   mysql-data:
-  redis-data:
-  mongo-data:
   client-node-modules:
   server-node-modules:
   shared-node-modules:

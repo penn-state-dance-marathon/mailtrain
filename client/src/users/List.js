@@ -32,7 +32,7 @@ export default class List extends Component {
             { data: 1, title: t("username") },
         ];
 
-        if (mailtrainConfig.isAuthMethodLocal) {
+        if (mailtrainConfig.isAuthMethodLocal || mailtrainConfig.keycloakEnabled) {
             columns.push({ data: 2, title: t("fullName") });
         }
 

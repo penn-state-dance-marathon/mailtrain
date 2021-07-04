@@ -47,6 +47,7 @@ async function getAuthenticatedConfig(context) {
         tagLanguages: config.tagLanguages,
         mosaico: config.mosaico,
         verpEnabled: config.verp.enabled,
+        keycloakEnabled: config.keycloak.enabled,
         reportsEnabled: config.reports.enabled,
         channelsEnabled: config.channels.enabled,
         mapsApiKey: setts.mapsApiKey,
