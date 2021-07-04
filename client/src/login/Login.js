@@ -132,7 +132,6 @@ export default class Login extends Component {
             <div>
                 <Title>{t('Login')}</Title>
                 <Subheading>{t('Use your Penn State credentials')}</Subheading>
-                <p>TEST</p>
                 <Form stateOwner={this} onSubmitAsync={::this.submitHandler}>
                     <InputField id="username" label={t('username')}/>
                     <InputField id="password" label={t('password')} type="password" />

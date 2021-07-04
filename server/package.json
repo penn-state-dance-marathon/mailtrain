@@ -43,7 +43,6 @@
     "posix": "^4.1.2"
   },
   "dependencies": {
-    "passport-oauth2": "^1.4.0",
     "aws-sdk": "^2.601.0",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.7.2",
@@ -106,6 +105,7 @@
     "passport-ldapauth": "^2.1.4",
     "passport-ldapjs": "^1.0.3",
     "passport-local": "^1.0.0",
+    "passport-oauth2": "^1.4.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
     "serve-favicon": "^2.5.0",
