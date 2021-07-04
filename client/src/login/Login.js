@@ -104,14 +104,30 @@ export default class Login extends Component {
 
     render() {
         const t = this.props.t;
-
+        
         let passwordResetLink;
         if (mailtrainConfig.isAuthMethodLocal) {
             passwordResetLink = <Link to={`/login/forgot/${this.getFormValue('username')}`}>{t('forgotYourPassword?')}</Link>;
         } else if (mailtrainConfig.externalPasswordResetLink) {
             passwordResetLink = <a href={mailtrainConfig.externalPasswordResetLink}>{t('forgotYourPassword?')}</a>;
         }
-        if (mailtrainConfig.authMethod != 'cas') {
+        if (mailtrainConfig.authMethod == 'cas') {
+            return (
+              <div>
+                <Title>{t('signIn')} CAS</Title>
+                {<a href="/cas/login" class="btn btn-primary">{t('signIn')}</a>}
+                {passwordResetLink}
+               </div>
+            );
+        } else if (mailtrainConfig.authMethod == 'Keycloak') {
+            return (
+                <div>
+                  <Title>{t('signIn')} with Keycloak Single Sign-On</Title>
+                  <p>Note: You will be automatically logged in if you go directly to {location.hostname}!</p>
+                  {<a href="/rest/login" class="btn btn-primary">{t('signIn')}</a>}
+                 </div>
+              );
+        } else {
           return (
             <div>
                 <Title>{t('Login')}</Title>
@@ -128,14 +144,6 @@ export default class Login extends Component {
                     </ButtonRow>
                 </Form>
             </div>
-          );
-        } else {
-          return (
-            <div>
-              <Title>{t('signIn')} CAS</Title>
-              {<a href="/cas/login" class="btn btn-primary">{t('signIn')}</a>}
-              {passwordResetLink}
-             </div>
           );
         }
     }

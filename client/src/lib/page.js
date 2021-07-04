@@ -452,13 +452,13 @@ export class SectionContent extends Component {
         this.setFlashMessage(severity, text);
     }
 
-    async redirectToKeycloakLoginFlow() {
-        await axios.get(getUrl('/rest/login'));
+    redirectToKeycloakLoginFlow() {
+        window.location = '/rest/login'    
     }
 
     ensureAuthenticated() {
         if (!mailtrainConfig.isAuthenticated) {
-            if (mailtrainConfig.keycloakEnabled) {
+            if (mailtrainConfig.authMethod == 'Keycloak') {
                 try {
                     this.redirectToKeycloakLoginFlow();
                 } catch(err) {
