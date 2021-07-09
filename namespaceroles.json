@@ -1,0 +1,75 @@
+{
+    "Root": {
+        "master": [
+            "ec.Technology",
+            "ec.Executive"
+        ]
+    },
+    "AE": {
+        "master": [
+            "ec.DonorAndAlumniRelationsAlumniEngagement"
+        ],
+        "campaignsCreator": [
+            "ae.AlumniCommunicationsCoordinator",
+            "ae.AlumniCommunications",
+            "ae.THONNation"
+        ]
+    },
+    "COMM": {
+        "master": [
+            "ec.Communications"
+        ],
+        "campaignsCreator": [
+            "comm.OrganizationResourceCoordinator"
+        ]
+    },
+    "DEV": {
+        "master": [
+            "ec.DonorAndAlumniRelationsDevelopment"
+        ],
+        "campaignsCreator": [
+            "dev.THONNation",
+            "dev.StewardshipCoordinator",
+            "dev.SpecialProjects",
+            "dev.DevelopmentCommunicationsCoordinator",
+            "dev.DonorRelationsCoordinator"
+        ]
+    },
+    "DEV/HOS/SL": {
+        "master": [
+            "ec.DonorAndAlumniRelationsDevelopment",
+            "ec.SupplyLogistics",
+            "ec.Hospitality"
+        ],
+        "campaignsCreator": [
+            "dev.THONNation",
+            "dev.StewardshipCoordinator",
+            "dev.SpecialProjects",
+            "dev.DevelopmentCommunicationsCoordinator",
+            "dev.DonorRelationsCoordinator",
+            "sl.DonorContactCoordinator"
+        ]
+    },
+    "DR": {
+        "master": [
+            "ec.DancerRelations"
+        ],
+        "campaignsCreator": [
+            "dr.CommunicationsLiaison"
+        ]
+    },
+    "FR": {
+        "master": [
+            "ec.FamilyRelations"
+        ]
+    },
+    "FS/FIN": {
+        "master": [
+            "ec.RulesAndRegulationsFundraisingSafety",
+            "ec.Finance"
+        ],
+        "campaignsCreator": [
+            "fs.OnlineGiving"
+        ]
+    }
+}

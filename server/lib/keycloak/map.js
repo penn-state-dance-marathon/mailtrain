@@ -12,7 +12,6 @@ const { assign, listByUserDTAjax } = require('../../models/shares');
 const knex = require('../knex');
 
 async function getMailtrainRoleFromKeycloakRoles(keycloakRoles) {
-    return 'master';
     const settings = await settings.get(contextHelpers.getAdminContext(), ["ssoRoleMapping"]);
     const roleMapping = JSON.parse(settings.ssoRoleMapping);
     for (const mailtrainRole in roleMapping) {
@@ -23,7 +22,7 @@ async function getMailtrainRoleFromKeycloakRoles(keycloakRoles) {
             return mailtrainRole;
         }
     }
-    return config.ldap.newUserRole;
+    return config.keycloak.newUserRole;
 }
 
 async function getNamespacesFromKeycloakRoles(keycloakRoles) {
