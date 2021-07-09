@@ -12,8 +12,8 @@ const { assign, listByUserDTAjax } = require('../../models/shares');
 const knex = require('../knex');
 
 async function getMailtrainRoleFromKeycloakRoles(keycloakRoles) {
-    const settings = await settings.get(contextHelpers.getAdminContext(), ["ssoRoleMapping"]);
-    const roleMapping = JSON.parse(settings.ssoRoleMapping);
+    const ssoRoleMappingSettings = await settings.get(contextHelpers.getAdminContext(), ["ssoRoleMapping"]);
+    const roleMapping = JSON.parse(ssoRoleMappingSettings.ssoRoleMapping);
     for (const mailtrainRole in roleMapping) {
         // Check if the intersection of the roles in the settings and the user's role is nonempty
         // If so, give them that role.
